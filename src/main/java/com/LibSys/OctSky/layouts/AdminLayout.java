@@ -23,12 +23,10 @@ import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 
 import java.util.Optional;
 
 @JsModule("./styles/shared-styles.js")
-@Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./views/main/main-view.css")
 public class AdminLayout extends AppLayout {
 
@@ -82,8 +80,8 @@ public class AdminLayout extends AppLayout {
 
 
     private Component[] createMenuItems() {
-        return new Tab[]{createTab("Add user", AddUserView.class),
-                createTab("Add visitor", AddVisitorView.class)};
+        return new Tab[]{createTab("Lägg till användare", AddUserView.class),
+                createTab("Lägg till besökare", AddVisitorView.class)};
             }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {

@@ -8,7 +8,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 @Route(value = "visitor", layout = AdminLayout.class)
-@PageTitle("Visitor")
+@PageTitle("Besökare")
 @CssImport("./views/about/about-view.css")
 public class AddVisitorView extends Div {
 
