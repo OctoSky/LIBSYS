@@ -1,43 +1,40 @@
-package com.example.application.views.main;
+package com.LibSys.OctSky.layouts;
 
-import java.util.Optional;
-
-import com.example.application.views.Users.AddUserView;
-import com.example.application.views.Users.AddVisitorView;
+import com.LibSys.OctSky.views.Users.AddUserView;
+import com.LibSys.OctSky.views.Users.AddVisitorView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
-import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
-import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import com.vaadin.flow.component.dependency.CssImport;
 
-/**
- * The main view is a top-level placeholder for other views.
- */
-@PWA(name = "LIBSYS_2.0", shortName = "LIBSYS_2.0", enableInstallPrompt = false)
+import java.util.Optional;
+
 @JsModule("./styles/shared-styles.js")
-@Theme(value = Lumo.class, variant = Lumo.DARK)
+@Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./views/main/main-view.css")
-public class MainView extends AppLayout {
+public class AdminLayout extends AppLayout {
 
-    private final Tabs menu;
     private H1 viewTitle;
-
-    public MainView() {
+    private final Tabs menu;
+    public AdminLayout() {
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         menu = createMenu();
@@ -83,9 +80,11 @@ public class MainView extends AppLayout {
         return tabs;
     }
 
+
     private Component[] createMenuItems() {
-        return new Tab[]{createTab("Add user", AddUserView.class), createTab("Add visitor", AddVisitorView.class)};
-    }
+        return new Tab[]{createTab("Add user", AddUserView.class),
+                createTab("Add visitor", AddVisitorView.class)};
+            }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
         final Tab tab = new Tab();
@@ -110,4 +109,5 @@ public class MainView extends AppLayout {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
         return title == null ? "" : title.value();
     }
+
 }
