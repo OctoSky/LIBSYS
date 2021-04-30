@@ -2,6 +2,8 @@ package com.example.application.views.main;
 
 import java.util.Optional;
 
+import com.example.application.views.Users.AddUserView;
+import com.example.application.views.Users.AddVisitorView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -18,11 +20,7 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.PageTitle;
-import com.example.application.views.main.MainView;
-import com.example.application.views.libsys_20.LIBSYS_20View;
-import com.example.application.views.about.AboutView;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -86,7 +84,7 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[]{createTab("LIBSYS_2.0", LIBSYS_20View.class), createTab("About", AboutView.class)};
+        return new Tab[]{createTab("Add user", AddUserView.class), createTab("Add visitor", AddVisitorView.class)};
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
