@@ -27,7 +27,7 @@ public class AddUserView extends Div {
         grid.getColumnByKey("firstname").setHeader("Förnamn");
         grid.getColumnByKey("surname").setHeader("Efternamn");
         grid.getColumnByKey("phone").setHeader("Telefonnummer");
-        grid.getColumnByKey("email").setHeader("e-postadress");
+        grid.getColumnByKey("email").setHeader("E-postadress");
         grid.removeColumnByKey("id");
         add(grid);
         populateGrid();
