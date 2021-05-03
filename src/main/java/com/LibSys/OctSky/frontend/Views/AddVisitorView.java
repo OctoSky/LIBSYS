@@ -1,6 +1,6 @@
-package com.LibSys.OctSky.views.Users;
+package com.LibSys.OctSky.frontend.Views;
 
-import com.LibSys.OctSky.layouts.AdminLayout;
+import com.LibSys.OctSky.frontend.layouts.AdminLayout;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;

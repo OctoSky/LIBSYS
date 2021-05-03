@@ -20,7 +20,6 @@ public class Staff {
         this.email = email;
     }
 
-
     public int getId() {
 
         return id;
