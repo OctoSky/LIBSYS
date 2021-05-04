@@ -63,12 +63,14 @@ public class AddUserForm extends FormLayout {
         }
         else if(formState == FormState.Editing)
         {
-            staffObject = addUserView.getSelection();
-            staffBinder.setBean(staffObject);
-
-            addUserObjectBinder.setBean(userObject);
-
+            fillForm();
+            buttonLayout = buttonsEditing();
         }
+        else
+        {
+            this.setVisible(false);
+        }
+        add(firstname, surname, phone, email, rolesComboBox, buttonLayout);
     }
     public HorizontalLayout buttonsAdding()
     {
@@ -78,13 +80,21 @@ public class AddUserForm extends FormLayout {
     {
         return new HorizontalLayout(saveButton, clearButton, cancelButton);
     }
+    public void fillForm()
+    {
+        staffObject = addUserView.getSelection();
+        roleObject = new Roles(0, addUserView.getSelection().getroles());
+        staffBinder.setBean(staffObject);
+        userObject = new AddUserObject(staffObject, roleObject);
+        addUserObjectBinder.setBean(userObject);
+    }
     public void clearForm()
     {
-        staffObject = new Staff(0,"","","","","");
+        staffObject = new Staff(0, "","","","","");
+        roleObject = new Roles(0, "");
         userObject = new AddUserObject(null,null);
-
-        addUserObjectBinder.setBean(userObject);
         staffBinder.setBean(staffObject);
+        addUserObjectBinder.setBean(userObject);
     }
     public void configureButtons()
     {
