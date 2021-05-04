@@ -28,10 +28,13 @@ public class AddUserForm extends FormLayout {
     private ComboBox<Roles> rolesComboBox = new ComboBox<>("Befattning");
     private PasswordField passwordField = new PasswordField("Lösenord:");
 
+
     private Button saveButton = new Button("Spara");
     private Button clearButton = new Button("Rensa");
     private Button cancelButton = new Button("Avbryt");
+    private Button addButton = new Button("Lägg till");
     protected HorizontalLayout buttonLayout = new HorizontalLayout();
+    protected HorizontalLayout buttonLayoutAdding = new HorizontalLayout();
 
     private Binder<Staff> staffBinder = new Binder<>(Staff.class);
     private Binder<AddUserObject> addUserObjectBinder = new Binder<>(AddUserObject.class);
@@ -46,8 +49,8 @@ public class AddUserForm extends FormLayout {
         this.addUserView = addUserView;
         configureBinder();
         configureComboBox();
+        configureButtons();
 
-        buttonLayout.add(saveButton, clearButton, cancelButton);
     }
     public void fillForm()
     {
@@ -81,11 +84,20 @@ public class AddUserForm extends FormLayout {
             remove(firstname, surname, phone, email, rolesComboBox, buttonLayout);
         }
 
+
+    }
+
+    public void OpenForm()
+    {
+        clearForm();
+        add(firstname, surname, phone, email, rolesComboBox, buttonLayoutAdding);
+        this.setVisible(true);
     }
 
     public void configureButtons()
     {
-
+        buttonLayout.add(saveButton, clearButton, cancelButton);
+        buttonLayoutAdding.add(addButton, clearButton, cancelButton);
     }
 
     public void configureBinder() {
