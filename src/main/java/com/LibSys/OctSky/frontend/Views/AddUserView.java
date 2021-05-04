@@ -4,6 +4,7 @@ package com.LibSys.OctSky.frontend.Views;
 import com.LibSys.OctSky.backend.Service.StaffService;
 import com.LibSys.OctSky.backend.model.Staff;
 import com.LibSys.OctSky.frontend.forms.AddUserForm;
+import com.LibSys.OctSky.frontend.forms.FormState;
 import com.LibSys.OctSky.frontend.layouts.AdminLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -49,10 +50,22 @@ public class AddUserView extends Div {
         add(buttonLayout,grid, addUserForm);
 
     }
-    public void selectionHandler() {
-        boolean bool;
-        bool = selection.getValue() != null;
-        addUserForm.toggleForm(bool);
+
+    public void formVisibility(Boolean bool, FormState state) {
+        addUserForm.setVisible(bool);
+        addUserForm.configureForm(state);
+    }
+
+    public void selectionHandler()
+    {
+        if(selection.isEmpty())
+        {
+            formVisibility(false, FormState.None);
+        }
+        else
+        {
+            formVisibility(true, FormState.Editing);
+        }
     }
     public Staff getSelection()
     {
@@ -67,6 +80,6 @@ public class AddUserView extends Div {
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
-        addButton.addClickListener(Event-> addUserForm.OpenForm());
+        addButton.addClickListener(Event-> formVisibility(true, FormState.Adding));
     }
 }

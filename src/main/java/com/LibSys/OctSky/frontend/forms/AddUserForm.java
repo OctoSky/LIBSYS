@@ -52,48 +52,40 @@ public class AddUserForm extends FormLayout {
         configureButtons();
 
     }
-    public void fillForm()
+
+    public void configureForm(FormState formState)
     {
-        staffObject = addUserView.getSelection();
-        roleObject = new Roles(0, addUserView.getSelection().getroles());
-        userObject = new AddUserObject(staffObject, roleObject);
-        staffBinder.setBean(staffObject);
-        addUserObjectBinder.setBean(userObject);
+        remove(firstname, surname, phone, email, rolesComboBox, buttonLayout);
+        if(formState == FormState.Adding)
+        {
+            clearForm();
+            buttonLayout = buttonsAdding();
+        }
+        else if(formState == FormState.Editing)
+        {
+            staffObject = addUserView.getSelection();
+            staffBinder.setBean(staffObject);
+
+            addUserObjectBinder.setBean(userObject);
+
+        }
+    }
+    public HorizontalLayout buttonsAdding()
+    {
+        return new HorizontalLayout(addButton, clearButton, cancelButton);
+    }
+    public HorizontalLayout buttonsEditing()
+    {
+        return new HorizontalLayout(saveButton, clearButton, cancelButton);
     }
     public void clearForm()
     {
-        staffObject = new Staff(0, "","","","","");
-        roleObject = new Roles(0, "");
+        staffObject = new Staff(0,"","","","","");
         userObject = new AddUserObject(null,null);
-        staffBinder.setBean(staffObject);
+
         addUserObjectBinder.setBean(userObject);
+        staffBinder.setBean(staffObject);
     }
-    public void toggleForm(boolean visible)
-    {
-        if(visible)
-        {
-            remove(firstname, surname, phone, email, rolesComboBox, buttonLayout);
-            clearForm();
-            fillForm();
-            add(firstname, surname, phone, email, rolesComboBox, buttonLayout);
-            this.setVisible(true);
-        }
-        else
-        {
-            this.setVisible(false);
-            remove(firstname, surname, phone, email, rolesComboBox, buttonLayout);
-        }
-
-
-    }
-
-    public void OpenForm()
-    {
-        clearForm();
-        add(firstname, surname, phone, email, rolesComboBox, buttonLayoutAdding);
-        this.setVisible(true);
-    }
-
     public void configureButtons()
     {
         buttonLayout.add(saveButton, clearButton, cancelButton);
