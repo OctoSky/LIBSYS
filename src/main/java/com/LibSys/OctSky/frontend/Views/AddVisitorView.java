@@ -36,7 +36,7 @@ public class AddVisitorView extends Div {
         configureButtons();
         HorizontalLayout buttonLayout = new HorizontalLayout(addButton,removeButton);
         populateGrid();
-        add(buttonLayout,grid);
+        add(buttonLayout,grid, addVisitorForm);
 
 
     }
