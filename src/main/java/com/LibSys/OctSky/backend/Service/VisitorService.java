@@ -15,7 +15,7 @@ public class VisitorService {
     JdbcTemplate jdbcTemplate;
 
     public List findVisitor(){
-        String sql = "Select * FROM visitorview";
+        String sql = "SELECT * FROM visitorview";
         try {
             return jdbcTemplate.query(sql, (rs, rowNum) -> new Visitor(rs.getInt("cardNumber"), rs.getInt("socialsecuritynumber"), rs.getString("firstname"), rs.getString("surname")));
         }
