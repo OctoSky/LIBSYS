@@ -41,7 +41,7 @@ public class AddUserView extends Div {
         grid.getColumnByKey("phone").setHeader("Telefonnummer");
         grid.getColumnByKey("email").setHeader("E-postadress");
         grid.removeColumnByKey("id");
-     //   grid.asSingleSelect().addValueChangeListener(event -> selectionHandler());
+        //grid.asSingleSelect().addValueChangeListener(event -> selectionHandler());
 
         HorizontalLayout buttonLayout = new HorizontalLayout(addButton,removeButton);
         ConfigureButtons();
@@ -81,6 +81,7 @@ public class AddUserView extends Div {
         removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
         addButton.addClickListener(Event-> formVisibility(true, FormState.Adding));
+        removeButton.addClickListener(Event -> addUserForm.deleteStaff());
 
     }
 }

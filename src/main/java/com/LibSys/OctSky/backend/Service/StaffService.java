@@ -51,4 +51,11 @@ public class StaffService {
         jdbcTemplate.update(sql,firstName,surName,phone,email,role,password);
 
     }
+
+    public void deleteStaff(int id){
+
+        String sql = "CALL removeStaff(?)";
+        jdbcTemplate.update(sql,id);
+
+    }
 }

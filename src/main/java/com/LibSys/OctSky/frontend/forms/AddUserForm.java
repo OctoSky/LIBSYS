@@ -105,14 +105,20 @@ public class AddUserForm extends FormLayout {
         saveButton.addClickListener(e->saveStaff());
         addButton.addClickListener(e->addStaff());
     }
-    public void saveStaff()
-    {
+    public void saveStaff(){
+
+    }
+
+    public void deleteStaff(){
+        staffService.deleteStaff(addUserView.getSelection().getId());
+        addUserView.populateGrid();
 
     }
 
     public void addStaff(){
         staffService.addStaff(firstname.getValue(),surname.getValue(),phone.getValue(),email.getValue(),rolesComboBox.getValue().getRoleId(),"password");
         addUserView.populateGrid();
+        this.setVisible(false);
     }
 
     public void configureBinder() {
