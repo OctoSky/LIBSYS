@@ -3,22 +3,22 @@ package com.LibSys.OctSky.backend.model;
 public class Visitor {
 
     private int cardnumber;
-    private int socialsecuritynumber;
+    private String socialsecuritynumber;
     private String firstname;
     private String surname;
 
 
-    public Visitor(int cardnumber,int socialsecuritynumber, String firstname, String surname) {
+    public Visitor(int cardnumber,String socialsecuritynumber, String firstname, String surname) {
         this.cardnumber = cardnumber;
         this.socialsecuritynumber = socialsecuritynumber;
         this.firstname = firstname;
         this.surname = surname;
     }
-    public int getSocialsecuritynumber() {
+    public String getSocialsecuritynumber() {
         return socialsecuritynumber;
     }
 
-    public void setSocialsecuritynumber(int socialsecuritynumber) {
+    public void setSocialsecuritynumber(String socialsecuritynumber) {
         this.socialsecuritynumber = socialsecuritynumber;
     }
 

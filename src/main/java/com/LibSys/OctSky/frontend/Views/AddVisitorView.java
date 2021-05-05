@@ -31,7 +31,7 @@ public class AddVisitorView extends Div {
 
     public AddVisitorView(VisitorService visitorService) {
         this.visitorService = visitorService;
-        this.addVisitorForm = new AddVisitorForm();
+        this.addVisitorForm = new AddVisitorForm(visitorService);
         configureGrid();
         configureButtons();
         HorizontalLayout buttonLayout = new HorizontalLayout(addButton,removeButton);
@@ -60,6 +60,7 @@ public class AddVisitorView extends Div {
     public void configureButtons(){
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        addButton.addClickListener(e -> addVisitorForm.setVisible(true));
     }
 
 

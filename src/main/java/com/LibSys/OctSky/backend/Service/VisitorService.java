@@ -17,7 +17,7 @@ public class VisitorService {
     public List findVisitor(){
         String sql = "SELECT * FROM visitorview";
         try {
-            return jdbcTemplate.query(sql, (rs, rowNum) -> new Visitor(rs.getInt("cardNumber"), rs.getInt("socialsecuritynumber"), rs.getString("firstname"), rs.getString("surname")));
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new Visitor(rs.getInt("cardNumber"), rs.getString("socialsecuritynumber"), rs.getString("firstname"), rs.getString("surname")));
         }
         catch (Exception e){
             return new ArrayList();
