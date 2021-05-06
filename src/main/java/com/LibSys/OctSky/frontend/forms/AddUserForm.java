@@ -28,7 +28,6 @@ public class AddUserForm extends FormLayout {
     private ComboBox<Roles> rolesComboBox = new ComboBox<>("Befattning");
     private PasswordField passwordField = new PasswordField("Lösenord:");
 
-
     private Button saveButton = new Button("Spara");
     private Button clearButton = new Button("Rensa");
     private Button cancelButton = new Button("Avbryt");
@@ -43,7 +42,6 @@ public class AddUserForm extends FormLayout {
     private Staff staffObject = new Staff(0,"","","","","");
     private Roles roleObject = new Roles(0, "");
 
-
     public AddUserForm(StaffService staffService, AddUserView addUserView) {
         this.staffService = staffService;
         this.addUserView = addUserView;
@@ -55,7 +53,7 @@ public class AddUserForm extends FormLayout {
 
     public void configureForm(FormState formState)
     {
-        remove(firstname, surname, phone, email, rolesComboBox, buttonLayout);
+        remove(firstname, surname, phone, email, rolesComboBox, passwordField, buttonLayout);
         if(formState == FormState.Adding)
         {
             clearForm();
@@ -70,7 +68,7 @@ public class AddUserForm extends FormLayout {
         {
             this.setVisible(false);
         }
-        add(firstname, surname, phone, email, rolesComboBox, buttonLayout);
+        add(firstname, surname, phone, email, rolesComboBox, passwordField, buttonLayout);
     }
     public HorizontalLayout buttonsAdding()
     {
@@ -88,6 +86,7 @@ public class AddUserForm extends FormLayout {
         userObject = new AddUserObject(staffObject, roleObject);
         addUserObjectBinder.setBean(userObject);
     }
+
     public void clearForm()
     {
         staffObject = new Staff(0, "","","","","");
@@ -96,6 +95,7 @@ public class AddUserForm extends FormLayout {
         staffBinder.setBean(staffObject);
         addUserObjectBinder.setBean(userObject);
     }
+
     public void configureButtons()
     {
         buttonLayout.add(saveButton, clearButton, cancelButton);
@@ -105,6 +105,7 @@ public class AddUserForm extends FormLayout {
         saveButton.addClickListener(e->saveStaff());
         addButton.addClickListener(e->addStaff());
     }
+
     public void saveStaff(){
 
     }
@@ -116,7 +117,7 @@ public class AddUserForm extends FormLayout {
     }
 
     public void addStaff(){
-        staffService.addStaff(firstname.getValue(),surname.getValue(),phone.getValue(),email.getValue(),rolesComboBox.getValue().getRoleId(),"password");
+        staffService.addStaff(firstname.getValue(),surname.getValue(),phone.getValue(),email.getValue(),rolesComboBox.getValue().getRoleId(),passwordField.getValue(), "YaBoiKa");
         addUserView.populateGrid();
         this.setVisible(false);
     }
@@ -132,6 +133,7 @@ public class AddUserForm extends FormLayout {
         staffBinder.setBean(staffObject);
         addUserObjectBinder.setBean(userObject);
     }
+
     public void configureComboBox()
     {
         rolesComboBox.setItemLabelGenerator(Roles::getRoleName);
