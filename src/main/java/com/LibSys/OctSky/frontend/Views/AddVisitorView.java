@@ -61,7 +61,15 @@ public class AddVisitorView extends Div {
 
     public Visitor getSelection()
     {
-        return selection.getValue();
+        try
+        {
+            return selection.getValue();
+        }
+        catch (NullPointerException e)
+        {
+            return null;
+        }
+
     }
     public void configureButtons(){
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
