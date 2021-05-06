@@ -12,6 +12,7 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -19,7 +20,7 @@ import com.vaadin.flow.router.Route;
 @Route(value = "visitor", layout = AdminLayout.class)
 @PageTitle("Besökare")
 @CssImport("./views/about/about-view.css")
-public class AddVisitorView extends Div {
+public class AddVisitorView extends VerticalLayout {
 
     Button addButton = new Button("Lägg till");
     Button removeButton = new Button("Ta bort");
@@ -32,6 +33,9 @@ public class AddVisitorView extends Div {
     public AddVisitorView(VisitorService visitorService) {
         this.visitorService = visitorService;
         this.addVisitorForm = new AddVisitorForm(visitorService, this);
+
+        setSizeFull();
+
         addVisitorForm.setVisible(false);
         configureGrid();
         configureButtons();
