@@ -31,7 +31,8 @@ public class AddVisitorView extends Div {
 
     public AddVisitorView(VisitorService visitorService) {
         this.visitorService = visitorService;
-        this.addVisitorForm = new AddVisitorForm(visitorService);
+        this.addVisitorForm = new AddVisitorForm(visitorService, this);
+        addVisitorForm.setVisible(false);
         configureGrid();
         configureButtons();
         HorizontalLayout buttonLayout = new HorizontalLayout(addButton,removeButton);
@@ -48,19 +49,25 @@ public class AddVisitorView extends Div {
 
     public void configureGrid(){
 
-        grid.setColumns("cardnumber","socialsecuritynumber","firstname","surname");
+        grid.setColumns("visitorNumber","cardnumber","socialsecuritynumber","firstname","surname");
         grid.getColumnByKey("cardnumber").setHeader("Kortnummer");
         grid.getColumnByKey("socialsecuritynumber").setHeader("Personnummer");
         grid.getColumnByKey("firstname").setHeader("Förnamn");
         grid.getColumnByKey("surname").setHeader("Efternamn");
+        grid.removeColumnByKey("visitorNumber");
 
 
     }
 
+    public Visitor getSelection()
+    {
+        return selection.getValue();
+    }
     public void configureButtons(){
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         addButton.addClickListener(e -> addVisitorForm.setVisible(true));
+        removeButton.addClickListener(e -> addVisitorForm.deleteVisitor());
     }
 
 

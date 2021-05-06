@@ -17,13 +17,22 @@ public class VisitorService {
     public List findVisitor(){
         String sql = "SELECT * FROM visitorview";
         try {
-            return jdbcTemplate.query(sql, (rs, rowNum) -> new Visitor(rs.getInt("cardNumber"), rs.getString("socialsecuritynumber"), rs.getString("firstname"), rs.getString("surname")));
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new Visitor(rs.getInt("visitorNumber"), rs.getInt("cardNumber"), rs.getString("ssn"), rs.getString("firstname"), rs.getString("surname")));
         }
         catch (Exception e){
             return new ArrayList();
         }
-
-
     }
 
+    public void deleteVisitor(int visitorNumber)
+    {
+        String sql = "CALL deleteVisitor (?)";
+        jdbcTemplate.update(sql, visitorNumber);
+    }
+
+    public void addVisitor(String ssn, String firstname, String surname, String encrypt_pass)
+    {
+        String sql = "CALL addVisitor(?,?,?,?)";
+        jdbcTemplate.update(sql, ssn, firstname, surname, encrypt_pass);
+    }
 }

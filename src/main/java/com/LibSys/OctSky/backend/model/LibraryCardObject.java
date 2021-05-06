@@ -5,12 +5,12 @@ public class LibraryCardObject {
 
 
     private int cardnumber;
-    private int visitor_socialsecuritynumber;
+    private int visitorNumber;
 
 
     public LibraryCardObject(int cardnumber, int visitor_socialsecuritynumber) {
         this.cardnumber = cardnumber;
-        this.visitor_socialsecuritynumber = visitor_socialsecuritynumber;
+        this.visitorNumber = visitor_socialsecuritynumber;
     }
 
     public int getCardnumber() {
@@ -21,12 +21,12 @@ public class LibraryCardObject {
         this.cardnumber = cardnumber;
     }
 
-    public int getVisitor_socialsecuritynumber() {
-        return visitor_socialsecuritynumber;
+    public int getVisitorNumber() {
+        return visitorNumber;
     }
 
-    public void setVisitor_socialsecuritynumber(int visitor_socialsecuritynumber) {
-        this.visitor_socialsecuritynumber = visitor_socialsecuritynumber;
+    public void setVisitorNumber(int visitorNumber) {
+        this.visitorNumber = visitorNumber;
     }
 
 }
