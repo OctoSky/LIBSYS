@@ -49,5 +49,5 @@ jobs:
       with:
         app-name: 'OctSkyLibSys'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_8f24084eb4ea4b4d9bb4ad42cf17f606 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_3d4980a6f21b43d4a731b3a47e1f2321 }}
         package: '*.war'
