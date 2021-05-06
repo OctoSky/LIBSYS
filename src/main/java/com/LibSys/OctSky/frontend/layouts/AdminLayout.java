@@ -1,34 +1,28 @@
-package com.LibSys.OctSky.layouts;
+package com.LibSys.OctSky.frontend.layouts;
 
-import com.LibSys.OctSky.views.Users.AddUserView;
-import com.LibSys.OctSky.views.Users.AddVisitorView;
+import com.LibSys.OctSky.frontend.Views.AddUserView;
+import com.LibSys.OctSky.frontend.Views.AddVisitorView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
-import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 
 import java.util.Optional;
 
 @JsModule("./styles/shared-styles.js")
-@Theme(value = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./views/main/main-view.css")
 public class AdminLayout extends AppLayout {
 
@@ -82,8 +76,8 @@ public class AdminLayout extends AppLayout {
 
 
     private Component[] createMenuItems() {
-        return new Tab[]{createTab("Add user", AddUserView.class),
-                createTab("Add visitor", AddVisitorView.class)};
+        return new Tab[]{createTab("Lägg till användare", AddUserView.class),
+                createTab("Lägg till besökare", AddVisitorView.class)};
             }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
