@@ -6,17 +6,23 @@ import com.LibSys.OctSky.frontend.Views.AddVisitorView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
+import java.util.List;
+
 public class AddVisitorForm extends FormLayout {
 
+    private List<Visitor> visitorList;
 
     private Button addButton = new Button("Lägg till");
     private Button clearButton = new Button("Rensa");
     private Button cancelButton = new Button("Avbryt");
     private HorizontalLayout buttonLayout = new HorizontalLayout();
+    private Notification notify = new Notification();
 
     private VisitorService visitorService;
     private AddVisitorView addVisitorView;
@@ -28,7 +34,8 @@ public class AddVisitorForm extends FormLayout {
     private Binder<Visitor> visitorBinder = new Binder<>(Visitor.class);
     private Visitor visitor = new Visitor(0, 0,"", "", "");
 
-    public AddVisitorForm(VisitorService visitorService, AddVisitorView addVisitorView){
+    public AddVisitorForm(VisitorService visitorService, AddVisitorView addVisitorView)
+    {
         this.addVisitorView = addVisitorView;
         this.visitorService = visitorService;
         configureBinder();
@@ -39,9 +46,48 @@ public class AddVisitorForm extends FormLayout {
 
     }
 
+    public void closeNotification()
+    {
+        notify.close();
+        addButton.setEnabled(true);
+
+    }
+
+    public void addNotification(String message)
+    {
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        Label label = new Label(message);
+        label.setWidthFull();
+        notify = new Notification();
+        notify.setPosition(Notification.Position.MIDDLE);
+        Button notificationButton = new Button("Close");
+        horizontalLayout.add(label, notificationButton);
+        notificationButton.addClickListener(event -> closeNotification());
+        notify.add(horizontalLayout);
+        notificationButton.setVisible(true);
+        notify.open();
+    }
+
     public void addVisitor()
     {
-        visitorService.addVisitor(socialSecurityNumber_Field.getValue(), firstName_Field.getValue(), surName_Field.getValue(), "enc_password_super_secure123");
+        visitorList = visitorService.findVisitor();
+        boolean duplicateFound = false;
+        for(Visitor visitor: visitorList)
+        {
+            if(visitor.getSocialsecuritynumber().equals(socialSecurityNumber_Field.getValue()))
+            {
+                duplicateFound = true;
+            }
+        }
+        if(!duplicateFound) {
+            visitorService.addVisitor(socialSecurityNumber_Field.getValue(), firstName_Field.getValue(), surName_Field.getValue(), "enc_password_super_secure123");
+        }
+        else
+        {
+            addNotification("Personnummer finns redan, försök med ett annat!");
+            addButton.setEnabled(false);
+
+        }
         addVisitorView.populateGrid();
     }
 
