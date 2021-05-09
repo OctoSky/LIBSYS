@@ -2,7 +2,7 @@
   "_args": [
     [
       "@webcomponents/webcomponentsjs@2.5.0",
-      "C:\\Users\\emilb\\IdeaProjects\\LIBSYS"
+      "C:\\Users\\emilb\\IdeaProjects\\LIBSYSLatest"
     ]
   ],
   "_from": "@webcomponents/webcomponentsjs@2.5.0",
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/@webcomponents/webcomponentsjs/-/webcomponentsjs-2.5.0.tgz",
   "_spec": "2.5.0",
-  "_where": "C:\\Users\\emilb\\IdeaProjects\\LIBSYS",
+  "_where": "C:\\Users\\emilb\\IdeaProjects\\LIBSYSLatest",
   "author": {
     "name": "The Polymer Project Authors",
     "url": "https://polymer.github.io/AUTHORS.txt"
