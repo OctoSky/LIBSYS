@@ -76,8 +76,9 @@ public class AdminLayout extends AppLayout {
 
 
     private Component[] createMenuItems() {
-        return new Tab[]{createTab("Lägg till användare", AddUserView.class),
-                createTab("Lägg till besökare", AddVisitorView.class)};
+        return new Tab[]{
+                createTab("Hantera Användare", AddUserView.class),
+                createTab("Hantera Besökare", AddVisitorView.class)};
             }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {

@@ -18,7 +18,17 @@ public class Roles {
     }
 
     public String getRoleName() {
-        return roleName;
+        switch(this.roleId)
+        {
+            case(1):
+                return "Administratör";
+            case(2):
+                return "Bibliotekarie";
+            case(3):
+                return "Kund";
+            default:
+                return "";
+        }
     }
 
     public void setRoleName(String roleName) {
