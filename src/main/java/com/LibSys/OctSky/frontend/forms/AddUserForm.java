@@ -2,7 +2,6 @@ package com.LibSys.OctSky.frontend.forms;
 
 import com.LibSys.OctSky.backend.Service.StaffService;
 import com.LibSys.OctSky.backend.model.AddUserObject;
-import com.LibSys.OctSky.backend.model.Credentials;
 import com.LibSys.OctSky.backend.model.Roles;
 import com.LibSys.OctSky.backend.model.Staff;
 import com.LibSys.OctSky.frontend.Views.AddUserView;
@@ -137,6 +136,14 @@ public class AddUserForm extends FormLayout {
     public void configureComboBox()
     {
         rolesComboBox.setItemLabelGenerator(Roles::getRoleName);
-        rolesComboBox.setItems(staffService.findRoles());
+        rolesComboBox.setItems(rolesListSwedish());
+    }
+    public List<Roles> rolesListSwedish()
+    {
+        List<Roles> newList = staffService.findRoles();
+        newList.get(0).setRoleName("Administratör");
+        newList.get(1).setRoleName("Bibliotekarie");
+        newList.get(2).setRoleName("Kund");
+        return newList;
     }
 }
