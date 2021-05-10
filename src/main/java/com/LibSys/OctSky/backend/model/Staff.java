@@ -31,7 +31,17 @@ public class Staff {
     }
 
     public String getroles() {
-        return roles;
+        switch(roles)
+        {
+            case("Admin"):
+                return "Administratör";
+            case("Librarian"):
+                return "Bibliotekarie";
+            case("Member"):
+                return "Kund";
+            default:
+                return "";
+        }
     }
 
     public void setroles(String roles) {
