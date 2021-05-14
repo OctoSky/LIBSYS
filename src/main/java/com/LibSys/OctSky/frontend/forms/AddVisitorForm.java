@@ -3,14 +3,18 @@ package com.LibSys.OctSky.frontend.forms;
 import com.LibSys.OctSky.backend.Service.VisitorService;
 import com.LibSys.OctSky.backend.model.Visitor;
 import com.LibSys.OctSky.frontend.Views.AddVisitorView;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.Autocomplete;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -30,18 +34,24 @@ public class AddVisitorForm extends FormLayout {
     private TextField socialSecurityNumber_Field = new TextField("Personnummer");
     private TextField firstName_Field = new TextField("Förnamn");
     private TextField surName_Field = new TextField("Efternamn");
+    private EmailField email_Field = new EmailField("E-postadress");
+    private TextField phone_Field = new TextField("Telefonnr");
+    private TextField address_Field = new TextField("Adress");
 
     private Binder<Visitor> visitorBinder = new Binder<>(Visitor.class);
-    private Visitor visitor = new Visitor(0, 0,"", "", "");
+    private Visitor visitor = new Visitor(0, 0,"", "", "",""," ", "");
 
     public AddVisitorForm(VisitorService visitorService, AddVisitorView addVisitorView)
     {
         this.addVisitorView = addVisitorView;
         this.visitorService = visitorService;
+
         configureBinder();
         configureButtons();
+        configureFields();
+
         buttonLayout.add(addButton,clearButton,cancelButton);
-        add(socialSecurityNumber_Field,firstName_Field,surName_Field,buttonLayout);
+        add(socialSecurityNumber_Field,firstName_Field,surName_Field,email_Field, phone_Field, address_Field, buttonLayout);
 
 
     }
@@ -67,27 +77,45 @@ public class AddVisitorForm extends FormLayout {
         notificationButton.setVisible(true);
         notify.open();
     }
-
     public void addVisitor()
     {
+        boolean duplicateSSN = false;
         visitorList = visitorService.findVisitor();
-        boolean duplicateFound = false;
         for(Visitor visitor: visitorList)
         {
             if(visitor.getSocialsecuritynumber().equals(socialSecurityNumber_Field.getValue()))
             {
-                duplicateFound = true;
+                duplicateSSN = true;
             }
         }
-        if(!duplicateFound) {
-            visitorService.addVisitor(socialSecurityNumber_Field.getValue(), firstName_Field.getValue(), surName_Field.getValue(), "enc_password_super_secure123");
+        visitorList = visitorService.findVisitor();
+        if(!duplicateSSN) {
+            if (StringUtils.isNumeric(phone_Field.getValue()) && StringUtils.isNumeric(socialSecurityNumber_Field.getValue())) {
+                visitorService.addVisitor(socialSecurityNumber_Field.getValue(),
+                        firstName_Field.getValue(),
+                        surName_Field.getValue(),
+                        email_Field.getValue(),
+                        phone_Field.getValue(),
+                        address_Field.getValue(),
+                        "enc_password_super_secure123");
+            }
+            else if(!StringUtils.isNumeric(phone_Field.getValue()))
+            {
+                addNotification("Ett telefonnummer kan endast bestå av siffror!");
+                addButton.setEnabled(false);
+            }
+            else if(!StringUtils.isNumeric(socialSecurityNumber_Field.getValue()))
+            {
+                addNotification("Ett personnummer kan endast bestå av siffror!");
+                addButton.setEnabled(false);
+            }
         }
         else
         {
             addNotification("Personnummer finns redan, försök med ett annat!");
             addButton.setEnabled(false);
-
         }
+
         addVisitorView.populateGrid();
     }
 
@@ -95,6 +123,10 @@ public class AddVisitorForm extends FormLayout {
         visitorBinder.forField(socialSecurityNumber_Field).bind(Visitor::getSocialsecuritynumber,Visitor::setSocialsecuritynumber);
         visitorBinder.forField(firstName_Field).bind(Visitor::getFirstname,Visitor::setFirstname);
         visitorBinder.forField(surName_Field).bind(Visitor::getSurname,Visitor::setSurname);
+        visitorBinder.forField(email_Field).bind(Visitor::getEmail, Visitor::setEmail);
+        visitorBinder.forField(phone_Field).bind(Visitor::getPhone, Visitor::setPhone);
+        visitorBinder.forField(address_Field).bind(Visitor::getAddress, Visitor::setAddress);
+
         visitorBinder.setBean(visitor);
     }
 
@@ -109,7 +141,7 @@ public class AddVisitorForm extends FormLayout {
 
     public void clearForm()
     {
-        Visitor visitor = new Visitor(0, 0,"", "", "");
+        Visitor visitor = new Visitor(0, 0,"", "", "", "", "", "");
         visitorBinder.setBean(visitor);
 
     }
@@ -120,7 +152,11 @@ public class AddVisitorForm extends FormLayout {
         addVisitorView.populateGrid();
     }
 
-    public void configureForm(){
-
+    public void configureFields()
+    {
+        email_Field.setClearButtonVisible(true);
+        email_Field.setErrorMessage("Vänligen fyll i en giltig E-postadress");
+        phone_Field.setMaxLength(11);
+        socialSecurityNumber_Field.setMaxLength(12);
     }
 }

@@ -53,11 +53,15 @@ public class AddVisitorView extends VerticalLayout {
 
     public void configureGrid(){
 
-        grid.setColumns("visitorNumber","cardnumber","socialsecuritynumber","firstname","surname");
+        grid.setColumns("visitorNumber","cardnumber","socialsecuritynumber","firstname","surname","email","phone","address");
         grid.getColumnByKey("cardnumber").setHeader("Kortnummer");
         grid.getColumnByKey("socialsecuritynumber").setHeader("Personnummer");
         grid.getColumnByKey("firstname").setHeader("Förnamn");
         grid.getColumnByKey("surname").setHeader("Efternamn");
+        grid.getColumnByKey("email").setHeader("E-postadress");
+        grid.getColumnByKey("phone").setHeader("Telefonnr");
+        grid.getColumnByKey("address").setHeader("Adress");
+
         grid.removeColumnByKey("visitorNumber");
 
 

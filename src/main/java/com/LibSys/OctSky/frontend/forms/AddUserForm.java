@@ -6,9 +6,11 @@ import com.LibSys.OctSky.backend.model.Roles;
 import com.LibSys.OctSky.backend.model.Staff;
 import com.LibSys.OctSky.frontend.Views.AddUserView;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -97,8 +99,12 @@ public class AddUserForm extends FormLayout {
 
     public void configureButtons()
     {
+        addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        cancelButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+
         buttonLayout.add(saveButton, clearButton, cancelButton);
         buttonLayoutAdding.add(addButton, clearButton, cancelButton);
+
         clearButton.addClickListener(e->clearForm());
         cancelButton.addClickListener(e->this.setVisible(false));
         saveButton.addClickListener(e->saveStaff());
@@ -112,7 +118,6 @@ public class AddUserForm extends FormLayout {
     public void deleteStaff(){
         staffService.deleteStaff(addUserView.getSelection().getId());
         addUserView.populateGrid();
-
     }
 
     public void addStaff(){
