@@ -1,5 +1,6 @@
 package com.LibSys.OctSky.backend.Service;
 
+import com.LibSys.OctSky.backend.model.ArchivedBooks;
 import com.LibSys.OctSky.backend.model.Book;
 import com.LibSys.OctSky.backend.model.Category;
 import com.LibSys.OctSky.backend.model.Publisher;
@@ -32,6 +33,30 @@ public class BookService {
                     rs.getInt("categoryid"),
                     rs.getInt("publisherid"),
                     rs.getString("ebook")));
+        }
+        catch(Exception e)
+        {
+            return new ArrayList();
+        }
+    }
+
+    public List findArchivedBooks()
+    {
+        String sql = "SELECT * FROM archivedbooksview";
+        try
+        {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new ArchivedBooks(rs.getInt("id"),
+                    rs.getString("price"),
+                    rs.getString("title"),
+                    rs.getString("writer"),
+                    rs.getString("isbn"),
+                    rs.getString("description"),
+                    rs.getString("dewey"),
+                    rs.getString("category"),
+                    rs.getString("publisher"),
+                    rs.getInt("categoryid"),
+                    rs.getInt("publisherid"),
+                    rs.getString("reason")));
         }
         catch(Exception e)
         {

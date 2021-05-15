@@ -2,6 +2,7 @@ package com.LibSys.OctSky.frontend.layouts;
 
 import com.LibSys.OctSky.frontend.Views.AddUserView;
 import com.LibSys.OctSky.frontend.Views.AddVisitorView;
+import com.LibSys.OctSky.frontend.Views.ArchivedBooksView;
 import com.LibSys.OctSky.frontend.Views.ManageBookView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
@@ -80,7 +81,9 @@ public class AdminLayout extends AppLayout {
         return new Tab[]{
                 createTab("Hantera Användare", AddUserView.class),
                 createTab("Hantera Besökare", AddVisitorView.class),
-                createTab("Hantera Böcker", ManageBookView.class)};
+                createTab("Hantera Böcker", ManageBookView.class),
+                createTab("Arkiverade Böcker", ArchivedBooksView.class)
+        };
             }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
