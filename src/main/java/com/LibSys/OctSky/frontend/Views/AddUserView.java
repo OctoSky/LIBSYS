@@ -42,7 +42,7 @@ public class AddUserView extends VerticalLayout {
         grid.getColumnByKey("phone").setHeader("Telefonnummer");
         grid.getColumnByKey("email").setHeader("E-postadress");
         grid.removeColumnByKey("id");
-        //grid.asSingleSelect().addValueChangeListener(event -> selectionHandler());
+        grid.asSingleSelect().addValueChangeListener(event -> selectionHandler());
 
         HorizontalLayout buttonLayout = new HorizontalLayout(addButton,removeButton);
         ConfigureButtons();

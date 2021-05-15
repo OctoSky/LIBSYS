@@ -111,8 +111,17 @@ public class AddUserForm extends FormLayout {
         addButton.addClickListener(e->addStaff());
     }
 
-    public void saveStaff(){
-
+    public void saveStaff()
+    {
+        staffService.savestaff(addUserView.getSelection().getId(),
+                firstname.getValue(),
+                surname.getValue(),
+                phone.getValue(),
+                email.getValue(),
+                rolesComboBox.getValue().getRoleId(),
+                passwordField.getValue(),
+                "enc_password_super_secure123");
+        addUserView.populateGrid();
     }
 
     public void deleteStaff(){
@@ -143,6 +152,7 @@ public class AddUserForm extends FormLayout {
         rolesComboBox.setItemLabelGenerator(Roles::getRoleName);
         rolesComboBox.setItems(rolesListSwedish());
     }
+
     public List<Roles> rolesListSwedish()
     {
         List<Roles> newList = staffService.findRoles();

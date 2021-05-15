@@ -4,6 +4,7 @@ import com.LibSys.OctSky.backend.Service.VisitorService;
 import com.LibSys.OctSky.backend.model.Staff;
 import com.LibSys.OctSky.backend.model.Visitor;
 import com.LibSys.OctSky.frontend.forms.AddVisitorForm;
+import com.LibSys.OctSky.frontend.forms.FormState;
 import com.LibSys.OctSky.frontend.layouts.AdminLayout;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -61,7 +62,7 @@ public class AddVisitorView extends VerticalLayout {
         grid.getColumnByKey("email").setHeader("E-postadress");
         grid.getColumnByKey("phone").setHeader("Telefonnr");
         grid.getColumnByKey("address").setHeader("Adress");
-
+        grid.asSingleSelect().addValueChangeListener(event -> selectionHandler());
         grid.removeColumnByKey("visitorNumber");
 
 
@@ -79,10 +80,28 @@ public class AddVisitorView extends VerticalLayout {
         }
 
     }
+
+    public void formVisibility(Boolean bool, FormState state) {
+        addVisitorForm.setVisible(bool);
+        addVisitorForm.configureForm(state);
+    }
+
+    public void selectionHandler()
+    {
+        if(selection.isEmpty())
+        {
+            formVisibility(false, FormState.None);
+        }
+        else
+        {
+            formVisibility(true, FormState.Editing);
+        }
+    }
+
     public void configureButtons(){
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        addButton.addClickListener(e -> addVisitorForm.setVisible(true));
+        addButton.addClickListener(e -> formVisibility(true, FormState.Adding));
         removeButton.addClickListener(e -> addVisitorForm.deleteVisitor());
     }
 

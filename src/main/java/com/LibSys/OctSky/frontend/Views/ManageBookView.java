@@ -43,6 +43,7 @@ public class ManageBookView extends VerticalLayout {
         this.bookService = bookService;
         manageBookForm = new ManageBookForm(bookService, this);
         manageBookForm.setVisible(false);
+        this.setSizeFull();
         configureButtons();
         populateGrid();
         configureGrid();

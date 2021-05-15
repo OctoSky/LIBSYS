@@ -63,7 +63,7 @@ public class BookService {
                          int categoryid,
                          String ebook)
     {
-        String sql = "CALL saveBook(?,?,?,?,?,?,?,?,?,?)";
+        String sql = "CALL updatebook(?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, bookId, title, writer, isbn, description, price, dewey, publisherid, categoryid, ebook);
     }
 
