@@ -7,15 +7,44 @@ public class Visitor {
     private String socialsecuritynumber;
     private String firstname;
     private String surname;
+    private String email, phone, address;
 
 
-    public Visitor(int visitorNumber, int cardnumber, String socialsecuritynumber, String firstname, String surname) {
+    public Visitor(int visitorNumber, int cardnumber, String socialsecuritynumber, String firstname, String surname, String email, String phone, String address) {
         this.visitorNumber = visitorNumber;
         this.cardnumber = cardnumber;
         this.socialsecuritynumber = socialsecuritynumber;
         this.firstname = firstname;
         this.surname = surname;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getSocialsecuritynumber() {
         return socialsecuritynumber;
     }

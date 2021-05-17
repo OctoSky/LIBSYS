@@ -17,7 +17,19 @@ public class VisitorService {
     public List findVisitor(){
         String sql = "SELECT * FROM visitorview";
         try {
-            return jdbcTemplate.query(sql, (rs, rowNum) -> new Visitor(rs.getInt("visitorNumber"), rs.getInt("cardNumber"), rs.getString("ssn"), rs.getString("firstname"), rs.getString("surname")));
+            return jdbcTemplate.query(sql, (rs, rowNum) ->
+                    new Visitor(
+                            rs.getInt("visitorNumber"),
+                    rs.getInt("cardNumber"),
+                    rs.getString("ssn"),
+                    rs.getString("firstname"),
+                    rs.getString("surname"),
+                    rs.getString("email"),
+                    rs.getString("phone"),
+                    rs.getString("address")
+                    )
+            );
+
         }
         catch (Exception e){
             return new ArrayList();
@@ -30,9 +42,22 @@ public class VisitorService {
         jdbcTemplate.update(sql, visitorNumber);
     }
 
-    public void addVisitor(String ssn, String firstname, String surname, String encrypt_pass)
+    public void savevisitor(int visitorid,
+                            String SSN,
+                            String vfirstname,
+                            String vsurname,
+                            String vemail,
+                            String vphone,
+                            String vaddress,
+                            String enc_pass)
     {
-        String sql = "CALL addVisitor(?,?,?,?)";
-        jdbcTemplate.update(sql, ssn, firstname, surname, encrypt_pass);
+        String sql = "CALL updatevisitor(?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, visitorid, SSN, vfirstname, vsurname, vemail, vphone, vaddress, enc_pass);
+    }
+
+    public void addVisitor(String ssn, String firstname, String surname, String email, String phone, String address, String encrypt_pass)
+    {
+        String sql = "CALL addVisitor(?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, ssn, firstname, surname, email, phone, address, encrypt_pass);
     }
 }

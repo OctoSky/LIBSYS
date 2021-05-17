@@ -39,6 +39,19 @@ public class StaffService {
         }
     }
 
+    public void savestaff(int staffid,
+                          String firstname,
+                          String surname,
+                          String phone,
+                          String email,
+                          int role_id,
+                          String password,
+                          String enc_pass)
+    {
+        String sql = "CALL updatestaff(?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, staffid, firstname, surname, phone, email, role_id, password, enc_pass);
+    }
+
     public List findCredentials() {
         try {
             return jdbcTemplate.query("SELECT * FROM Credentials", (rs, rowNum) -> new Credentials(rs.getString("Staff_email"), rs.getString("password")));
@@ -48,7 +61,7 @@ public class StaffService {
     }
 
     public void addStaff(String firstName, String surName, String phone, String email, int role, String password, String encrypt_pass){
-        String sql = "CALL addUser(?,?,?,?,?,?,?)";
+        String sql = "CALL addstaff(?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql,firstName,surName,phone,email,role,password, encrypt_pass);
 
     }

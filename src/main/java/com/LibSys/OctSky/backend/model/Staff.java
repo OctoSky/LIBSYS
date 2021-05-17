@@ -4,13 +4,13 @@ public class Staff {
     
 
     private int id;
-    private String roles;
+    private int roles;
     private String firstname;
     private String surname;
     private String phone;
     private String email;
 
-    public Staff(int id, String roles, String firstname, String surname, String phone, String email) {
+    public Staff(int id, int roles, String firstname, String surname, String phone, String email) {
 
         this.id = id;
         this.roles = roles;
@@ -33,18 +33,23 @@ public class Staff {
     public String getroles() {
         switch(roles)
         {
-            case("Admin"):
+            case(1):
                 return "Administratör";
-            case("Librarian"):
+            case(2):
                 return "Bibliotekarie";
-            case("Member"):
+            case(3):
                 return "Kund";
             default:
                 return "";
         }
     }
 
-    public void setroles(String roles) {
+    public int getRoleId()
+    {
+        return roles;
+    }
+
+    public void setroles(int roles) {
         this.roles = roles;
     }
 
