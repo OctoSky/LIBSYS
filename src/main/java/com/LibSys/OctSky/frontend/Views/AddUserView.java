@@ -17,7 +17,7 @@ import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@Route(value = "", layout = AdminLayout.class)
+@Route(value = "user", layout = AdminLayout.class)
 @PageTitle("Användare")
 @CssImport("./views/about/about-view.css")
 public class AddUserView extends VerticalLayout {
