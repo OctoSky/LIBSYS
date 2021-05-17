@@ -40,12 +40,15 @@ public class AddUserForm extends FormLayout {
     private Binder<AddUserObject> addUserObjectBinder = new Binder<>(AddUserObject.class);
 
     private AddUserObject userObject = new AddUserObject(null, null);
-    private Staff staffObject = new Staff(0,"","","","","");
+    private Staff staffObject = new Staff(0,0,"","","","");
     private Roles roleObject = new Roles(0, "");
 
     public AddUserForm(StaffService staffService, AddUserView addUserView) {
         this.staffService = staffService;
         this.addUserView = addUserView;
+
+        phone.setMaxLength(10);
+
         configureBinder();
         configureComboBox();
         configureButtons();
@@ -82,7 +85,7 @@ public class AddUserForm extends FormLayout {
     public void fillForm()
     {
         staffObject = addUserView.getSelection();
-        roleObject = new Roles(0, addUserView.getSelection().getroles());
+        roleObject = rolesListSwedish().get(addUserView.getSelection().getRoleId()-1);
         staffBinder.setBean(staffObject);
         userObject = new AddUserObject(staffObject, roleObject);
         addUserObjectBinder.setBean(userObject);
@@ -90,7 +93,7 @@ public class AddUserForm extends FormLayout {
 
     public void clearForm()
     {
-        staffObject = new Staff(0, "","","","","");
+        staffObject = new Staff(0, 0,"","","","");
         roleObject = new Roles(0, "");
         userObject = new AddUserObject(null,null);
         staffBinder.setBean(staffObject);
@@ -157,8 +160,11 @@ public class AddUserForm extends FormLayout {
     {
         List<Roles> newList = staffService.findRoles();
         newList.get(0).setRoleName("Administratör");
+        newList.get(0).setRoleId(1);
         newList.get(1).setRoleName("Bibliotekarie");
+        newList.get(1).setRoleId(2);
         newList.get(2).setRoleName("Kund");
+        newList.get(2).setRoleId(3);
         return newList;
     }
 }
