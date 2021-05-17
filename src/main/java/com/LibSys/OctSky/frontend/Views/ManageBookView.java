@@ -10,6 +10,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
@@ -18,6 +19,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.data.selection.SingleSelect;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
@@ -34,9 +36,14 @@ public class ManageBookView extends VerticalLayout {
 
     Button add = new Button("Lägg till");
     Button remove = new Button("Ta bort");
+    private final TextField ISBNFilter = new TextField();
+    private final TextField categoryFilter = new TextField();
+    private final TextField titleFilter = new TextField();
+    private final TextField writerFilter = new TextField();
 
     protected SingleSelect<Grid<Book>,Book> selection = grid.asSingleSelect();
     protected HorizontalLayout buttonLayout = new HorizontalLayout();
+    protected HorizontalLayout filterLayout = new HorizontalLayout();
 
     public ManageBookView(BookService bookService)
     {
@@ -47,7 +54,8 @@ public class ManageBookView extends VerticalLayout {
         configureButtons();
         populateGrid();
         configureGrid();
-        add(buttonLayout, grid, manageBookForm);
+        configureFilterField();
+        add(buttonLayout, filterLayout, grid, manageBookForm);
     }
 
     public void populateGrid()
@@ -87,6 +95,28 @@ public class ManageBookView extends VerticalLayout {
         grid.getColumnByKey("title").setWidth("200px");
         grid.getColumnByKey("price").setWidth("30px");
     }
+
+    public void configureFilterField() {
+        ISBNFilter.setValueChangeMode(ValueChangeMode.EAGER);
+        writerFilter.setValueChangeMode(ValueChangeMode.EAGER);
+        titleFilter.setValueChangeMode(ValueChangeMode.EAGER);
+        categoryFilter.setValueChangeMode(ValueChangeMode.EAGER);
+
+        ISBNFilter.setPlaceholder("Sök efter ISBN...");
+        categoryFilter.setPlaceholder("Sök efter kategori...");
+        titleFilter.setPlaceholder("Sök efter titel...");
+        writerFilter.setPlaceholder("Sök efter författare...");
+
+        ISBNFilter.setClearButtonVisible(true);
+        categoryFilter.setClearButtonVisible(true);
+        titleFilter.setClearButtonVisible(true);
+        writerFilter.setClearButtonVisible(true);
+
+        filterLayout.add(titleFilter, writerFilter, ISBNFilter, categoryFilter);
+
+    }
+
+
 
     public Button createDescriptionButton(Book item)
     {
