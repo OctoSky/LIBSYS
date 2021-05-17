@@ -10,7 +10,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.selection.SingleSelect;
@@ -45,7 +44,7 @@ public class AddUserView extends VerticalLayout {
         grid.asSingleSelect().addValueChangeListener(event -> selectionHandler());
 
         HorizontalLayout buttonLayout = new HorizontalLayout(addButton,removeButton);
-        ConfigureButtons();
+        configureButtons();
         populateGrid();
         addUserForm.setVisible(false);
         add(buttonLayout,grid, addUserForm);
@@ -77,7 +76,7 @@ public class AddUserView extends VerticalLayout {
         grid.setItems(staffService.findStaff());
     }
 
-    public void ConfigureButtons(){
+    public void configureButtons(){
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 

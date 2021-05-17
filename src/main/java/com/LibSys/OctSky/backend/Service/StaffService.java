@@ -21,7 +21,13 @@ public class StaffService {
 
         try
         {
-            return jdbcTemplate.query("SELECT id, firstname, surname, phone, email, role FROM staffview", (rs, rowNum) -> new Staff(rs.getInt("id"), rs.getString("role"), rs.getString("firstname"), rs.getString("surname"), rs.getString("phone"), rs.getString("email")));
+            return jdbcTemplate.query("SELECT id, firstname, surname, phone, email, role FROM staffview", (rs, rowNum) -> new Staff(
+                    rs.getInt("id"),
+                    rs.getInt("role"),
+                    rs.getString("firstname"),
+                    rs.getString("surname"),
+                    rs.getString("phone"),
+                    rs.getString("email")));
         }
         catch(Exception e)
         {
