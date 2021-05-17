@@ -102,6 +102,7 @@ public class AddUserForm extends FormLayout {
 
     public void configureButtons()
     {
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         cancelButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 

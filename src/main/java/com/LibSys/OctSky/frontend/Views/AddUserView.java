@@ -33,6 +33,7 @@ public class AddUserView extends VerticalLayout {
         this.addUserForm = new AddUserForm(staffService, this);
 
         setSizeFull();
+        removeButton.setEnabled(false);
 
         grid.setColumns("id","roles","firstname","surname","phone","email");
         grid.getColumnByKey("roles").setHeader("Befattning");
@@ -60,10 +61,12 @@ public class AddUserView extends VerticalLayout {
     {
         if(selection.isEmpty())
         {
+            removeButton.setEnabled(false);
             formVisibility(false, FormState.None);
         }
         else
         {
+            removeButton.setEnabled(true);
             formVisibility(true, FormState.Editing);
         }
     }
