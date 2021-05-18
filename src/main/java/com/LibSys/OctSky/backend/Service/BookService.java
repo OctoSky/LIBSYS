@@ -32,7 +32,8 @@ public class BookService {
                     rs.getString("publisher"),
                     rs.getInt("categoryid"),
                     rs.getInt("publisherid"),
-                    rs.getString("ebook")));
+                    rs.getString("ebook"),
+                    rs.getInt("amount")));
         }
         catch(Exception e)
         {
@@ -86,10 +87,10 @@ public class BookService {
                          String dewey,
                          int publisherid,
                          int categoryid,
-                         String ebook)
+                         String ebook, int amount)
     {
-        String sql = "CALL updatebook(?,?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, bookId, title, writer, isbn, description, price, dewey, publisherid, categoryid, ebook);
+        String sql = "CALL updatebook(?,?,?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, bookId, title, writer, isbn, description, price, dewey, publisherid, categoryid, ebook, amount);
     }
 
     public void addnewbook(String title,
@@ -100,10 +101,10 @@ public class BookService {
                            String dewey,
                            int publisherid,
                            int categoryid,
-                           String ebook)
+                           String ebook, int amount)
     {
-        String sql = "CALL addnewbook(?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, title, writer, isbn, description, price, dewey, publisherid, categoryid, ebook);
+        String sql = "CALL addnewbook(?,?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, title, writer, isbn, description, price, dewey, publisherid, categoryid, ebook, amount);
     }
     public void deleteBook(int id, String reason)
     {

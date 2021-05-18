@@ -141,7 +141,7 @@ public class ManageBookView extends VerticalLayout {
 
     public void configureGrid()
     {
-        grid.setColumns("id","title", "writer", "description", "price", "isbn", "dewey", "category", "publisher","categoryId","publisherId", "ebook");
+        grid.setColumns("id","title", "writer", "description", "price", "isbn", "dewey", "category", "publisher","categoryId","publisherId", "ebook", "amount");
         grid.getColumnByKey("title").setHeader("Titel");
         grid.getColumnByKey("writer").setHeader("Författare");
         grid.getColumnByKey("price").setHeader("Pris");
@@ -150,6 +150,7 @@ public class ManageBookView extends VerticalLayout {
         grid.getColumnByKey("category").setHeader("Kategori");
         grid.getColumnByKey("publisher").setHeader("Förlag");
         grid.getColumnByKey("ebook").setHeader("E-bok");
+        grid.getColumnByKey("amount").setHeader("Antal");
         grid.removeColumnByKey("id");
         grid.removeColumnByKey("description");
         grid.removeColumnByKey("categoryId");

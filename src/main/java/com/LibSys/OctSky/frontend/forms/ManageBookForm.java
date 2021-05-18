@@ -8,6 +8,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.component.textfield.TextField;
 import java.awt.*;
@@ -21,6 +22,7 @@ public class ManageBookForm extends FormLayout {
     private TextField isbn = new TextField("ISBN");
     private TextField description = new TextField("Beskrivning");
     private TextField dewey = new TextField("Dewey");
+    private IntegerField amount = new IntegerField("Antal");
 
     private ComboBox<Ebook> ebookComboBox = new ComboBox<Ebook>("E-bok");
     private ComboBox<Publisher> publisherComboBox = new ComboBox<Publisher>("Utgivare");
@@ -40,7 +42,7 @@ public class ManageBookForm extends FormLayout {
     private Category category = new Category(0, "");
     private Publisher publisher = new Publisher(0, "");
     private Ebook ebook = new Ebook("");
-    private Book book = new Book(0,"","","","","","","","",0,0,"");
+    private Book book = new Book(0,"","","","","","","","",0,0,"", 0);
     Binder<Book> bookBinder = new Binder<>(Book.class);
     private AddBookObject addBookObject = new AddBookObject(book, publisher, category, ebook);
     Binder<AddBookObject> addBookObjectBinder = new Binder<>(AddBookObject.class);
@@ -54,7 +56,7 @@ public class ManageBookForm extends FormLayout {
         configureComboBoxes();
         configureBinder();
         configureButtons();
-        add(title, price, writer, isbn, description, dewey, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
+        add(title, price, writer, isbn, description, dewey, amount, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
     }
 
     public void configureBinder()
@@ -65,6 +67,7 @@ public class ManageBookForm extends FormLayout {
         bookBinder.forField(isbn).bind(Book::getIsbn, Book::setIsbn);
         bookBinder.forField(description).bind(Book::getDescription, Book::setDescription);
         bookBinder.forField(dewey).bind(Book::getDewey, Book::setDewey);
+        bookBinder.forField(amount).bind(Book::getAmount, Book::setAmount);
         addBookObjectBinder.forField(categoryComboBox).bind(AddBookObject::getCategory,AddBookObject::setCategory);
         addBookObjectBinder.forField(publisherComboBox).bind(AddBookObject::getPublisher, AddBookObject::setPublisher);
         addBookObjectBinder.forField(ebookComboBox).bind(AddBookObject::getEbook, AddBookObject::setEbook);
@@ -74,7 +77,7 @@ public class ManageBookForm extends FormLayout {
 
     public void configureForm(FormState formState)
     {
-        remove(title, price, writer, isbn, description, dewey, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
+        remove(title, price, writer, isbn, description, dewey, amount, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
         if(formState == FormState.Adding)
         {
             clearForm();
@@ -89,7 +92,7 @@ public class ManageBookForm extends FormLayout {
         {
             this.setVisible(false);
         }
-        add(title, price, writer, isbn, description, dewey, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
+        add(title, price, writer, isbn, description, dewey, amount, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
 
     }
     public HorizontalLayout buttonsAdding()
@@ -116,7 +119,7 @@ public class ManageBookForm extends FormLayout {
 
     public void clearForm()
     {
-        book = new Book(0, "","","","","","","","",0,0,"");
+        book = new Book(0, "","","","","","","","",0,0, "", 0);
         bookBinder.setBean(book);
 
         publisher = new Publisher(0, "");
@@ -134,14 +137,14 @@ public class ManageBookForm extends FormLayout {
 
     public void addBook()
     {
-        bookService.addnewbook(title.getValue(), writer.getValue(), isbn.getValue(), description.getValue(), price.getValue(), dewey.getValue(), publisherComboBox.getValue().getId(), categoryComboBox.getValue().getId(), ebookComboBox.getValue().getOption());
+        bookService.addnewbook(title.getValue(), writer.getValue(), isbn.getValue(), description.getValue(), price.getValue(), dewey.getValue(), publisherComboBox.getValue().getId(), categoryComboBox.getValue().getId(), ebookComboBox.getValue().getOption(), amount.getValue());
         manageBookView.populateGrid();
         this.setVisible(false);
     }
 
     public void saveBook()
     {
-        bookService.savebook(manageBookView.getSelection().getId(), title.getValue(), writer.getValue(), isbn.getValue(), description.getValue(), price.getValue(), dewey.getValue(), publisherComboBox.getValue().getId(), categoryComboBox.getValue().getId(), ebookComboBox.getValue().getOption());
+        bookService.savebook(manageBookView.getSelection().getId(), title.getValue(), writer.getValue(), isbn.getValue(), description.getValue(), price.getValue(), dewey.getValue(), publisherComboBox.getValue().getId(), categoryComboBox.getValue().getId(), ebookComboBox.getValue().getOption(), amount.getValue());
         manageBookView.populateGrid();
         this.setVisible(false);
     }
