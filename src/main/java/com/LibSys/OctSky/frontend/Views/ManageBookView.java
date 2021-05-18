@@ -51,6 +51,7 @@ public class ManageBookView extends VerticalLayout {
         manageBookForm = new ManageBookForm(bookService, this);
         manageBookForm.setVisible(false);
         this.setSizeFull();
+        remove.setEnabled(false);
         configureButtons();
         populateGrid();
         configureGrid();
@@ -174,10 +175,12 @@ public class ManageBookView extends VerticalLayout {
     {
         if(selection.isEmpty())
         {
+            remove.setEnabled(false);
             formVisibility(false, FormState.None);
         }
         else
         {
+            remove.setEnabled(true);
             formVisibility(true, FormState.Editing);
         }
     }
