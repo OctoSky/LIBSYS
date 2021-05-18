@@ -47,9 +47,9 @@ public class BookService {
                     rs.getString("writer"),
                     rs.getString("description"),
                     rs.getString("category"),
+                    rs.getString("publisher"),
                     rs.getString("dewey"),
                     rs.getString("ebook"),
-                    rs.getString("publisher"),
                     rs.getInt("amount")));
         }
         catch(Exception e)
@@ -57,6 +57,8 @@ public class BookService {
             return new ArrayList();
         }
     }
+
+
 
     public List findArchivedBooks()
     {
