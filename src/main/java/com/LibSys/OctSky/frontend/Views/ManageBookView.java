@@ -29,6 +29,7 @@ import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import javax.xml.validation.ValidatorHandler;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Route(value = "books", layout = AdminLayout.class)
 @PageTitle("Böcker")
@@ -74,7 +75,7 @@ public class ManageBookView extends VerticalLayout {
             int finalI = i;
             textFields[i].setPlaceholder("Sök efter " + filterStrings[i] + " ...");
             textFields[i].setValueChangeMode(ValueChangeMode.EAGER);
-            textFields[i].addValueChangeListener(e->grid.setItems(filterBy(filterStrings[finalI], textFields[finalI].getValue())));
+            textFields[i].addValueChangeListener(e->grid.setItems(filterBy(filterStrings[finalI], textFields[finalI].getValue().toLowerCase())));
         }
     }
 
@@ -83,9 +84,10 @@ public class ManageBookView extends VerticalLayout {
         List<Book> oldList = bookService.findBooks();
         ArrayList<Book> newList = new ArrayList<>();
 
+
         if(filter.equals("kategori")) {
             for (Book book : oldList) {
-                if (book.getCategory().contains(str)) {
+                if (book.getCategory().toLowerCase().contains(str.toLowerCase())) {
                     newList.add(book);
                 }
             }
@@ -93,7 +95,7 @@ public class ManageBookView extends VerticalLayout {
         else if(filter.equals("isbn"))
         {
             for (Book book : oldList) {
-                if (book.getIsbn().contains(str)) {
+                if (book.getIsbn().toLowerCase().contains(str.toLowerCase())) {
                     newList.add(book);
                 }
             }
@@ -102,7 +104,7 @@ public class ManageBookView extends VerticalLayout {
         {
             for(Book book : oldList)
             {
-                if(book.getTitle().contains(str))
+                if(book.getTitle().toLowerCase().contains(str.toLowerCase()))
                 {
                     newList.add(book);
                 }
@@ -112,7 +114,7 @@ public class ManageBookView extends VerticalLayout {
         {
             for(Book book : oldList)
             {
-                if(book.getWriter().contains(str))
+                if(book.getWriter().toLowerCase().contains(str.toLowerCase()))
                 {
                     newList.add(book);
                 }
