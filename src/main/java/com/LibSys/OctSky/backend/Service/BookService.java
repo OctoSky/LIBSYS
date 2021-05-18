@@ -1,9 +1,6 @@
 package com.LibSys.OctSky.backend.Service;
 
-import com.LibSys.OctSky.backend.model.ArchivedBooks;
-import com.LibSys.OctSky.backend.model.Book;
-import com.LibSys.OctSky.backend.model.Category;
-import com.LibSys.OctSky.backend.model.Publisher;
+import com.LibSys.OctSky.backend.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -33,6 +30,26 @@ public class BookService {
                     rs.getInt("categoryid"),
                     rs.getInt("publisherid"),
                     rs.getString("ebook"),
+                    rs.getInt("amount")));
+        }
+        catch(Exception e)
+        {
+            return new ArrayList();
+        }
+    }
+
+    public List findVisitorBooks() {
+
+        String sql = "SELECT * FROM visitorbookview";
+        try {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new VisitorBook(
+                    rs.getString("title"),
+                    rs.getString("writer"),
+                    rs.getString("description"),
+                    rs.getString("category"),
+                    rs.getString("dewey"),
+                    rs.getString("ebook"),
+                    rs.getString("publisher"),
                     rs.getInt("amount")));
         }
         catch(Exception e)

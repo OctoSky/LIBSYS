@@ -188,8 +188,8 @@ public class ManageBookView extends VerticalLayout {
         VerticalLayout verticalLayout = new VerticalLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
         Notification notification = new Notification();
-        Button button = new Button("okej");
-        Button cancelbutton = new Button("avbryt");
+        Button button = new Button("Okej");
+        Button cancelbutton = new Button("Avbryt");
         TextField reason = new TextField("");
         Label label = new Label("Skriv en anledning i textfältet");
         button.addClickListener(event ->
