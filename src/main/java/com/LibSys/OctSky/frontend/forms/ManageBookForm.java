@@ -62,9 +62,9 @@ public class ManageBookForm extends FormLayout {
         bookBinder.forField(title).bind(Book::getTitle, Book::setTitle);
         bookBinder.forField(price).bind(Book::getPrice, Book::setPrice);
         bookBinder.forField(writer).bind(Book::getWriter, Book::setWriter);
-        bookBinder.forField(isbn).bind(Book::getIsbn, Book::setIsbn);
+        bookBinder.forField(isbn).withValidator(isbn -> isbn.length() >= 10 , "Isbn måste vara minst 10 siffror").bind(Book::getIsbn, Book::setIsbn);
         bookBinder.forField(description).bind(Book::getDescription, Book::setDescription);
-        bookBinder.forField(dewey).bind(Book::getDewey, Book::setDewey);
+        bookBinder.forField(dewey).withValidator(dewey -> dewey.length() <=5,"Siffrorn måste vara mellan 0-999,och kan innehålla decimaler").bind(Book::getDewey, Book::setDewey);
         addBookObjectBinder.forField(categoryComboBox).bind(AddBookObject::getCategory,AddBookObject::setCategory);
         addBookObjectBinder.forField(publisherComboBox).bind(AddBookObject::getPublisher, AddBookObject::setPublisher);
         addBookObjectBinder.forField(ebookComboBox).bind(AddBookObject::getEbook, AddBookObject::setEbook);
