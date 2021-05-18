@@ -12,6 +12,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
@@ -118,6 +119,7 @@ public class ManageBookView extends VerticalLayout {
             }
         }
         return newList;
+
     }
 
     public void populateGrid()
@@ -157,6 +159,8 @@ public class ManageBookView extends VerticalLayout {
         grid.getColumnByKey("title").setWidth("200px");
         grid.getColumnByKey("price").setWidth("30px");
     }
+
+
 
     public Button createDescriptionButton(Book item)
     {
