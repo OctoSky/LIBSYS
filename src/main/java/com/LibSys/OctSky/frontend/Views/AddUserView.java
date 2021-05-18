@@ -16,6 +16,9 @@ import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Route(value = "", layout = AdminLayout.class)
 @PageTitle("Användare")
 @CssImport("./views/about/about-view.css")
@@ -75,11 +78,13 @@ public class AddUserView extends VerticalLayout {
         return selection.getValue();
     }
 
+
     public void populateGrid(){
         grid.setItems(staffService.findStaff());
     }
 
     public void configureButtons(){
+
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
