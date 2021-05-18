@@ -16,6 +16,9 @@ import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Route(value = "", layout = AdminLayout.class)
 @PageTitle("Användare")
 @CssImport("./views/about/about-view.css")
@@ -33,6 +36,7 @@ public class AddUserView extends VerticalLayout {
         this.addUserForm = new AddUserForm(staffService, this);
 
         setSizeFull();
+        removeButton.setEnabled(false);
 
         grid.setColumns("id","roles","firstname","surname","phone","email");
         grid.getColumnByKey("roles").setHeader("Befattning");
@@ -60,10 +64,12 @@ public class AddUserView extends VerticalLayout {
     {
         if(selection.isEmpty())
         {
+            removeButton.setEnabled(false);
             formVisibility(false, FormState.None);
         }
         else
         {
+            removeButton.setEnabled(true);
             formVisibility(true, FormState.Editing);
         }
     }
@@ -72,11 +78,13 @@ public class AddUserView extends VerticalLayout {
         return selection.getValue();
     }
 
+
     public void populateGrid(){
         grid.setItems(staffService.findStaff());
     }
 
     public void configureButtons(){
+
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 

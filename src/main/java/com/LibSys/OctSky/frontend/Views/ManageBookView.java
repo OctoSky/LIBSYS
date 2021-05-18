@@ -2,10 +2,12 @@ package com.LibSys.OctSky.frontend.Views;
 
 import com.LibSys.OctSky.backend.Service.BookService;
 import com.LibSys.OctSky.backend.model.Book;
+import com.LibSys.OctSky.backend.model.Staff;
 import com.LibSys.OctSky.backend.model.Visitor;
 import com.LibSys.OctSky.frontend.forms.FormState;
 import com.LibSys.OctSky.frontend.forms.ManageBookForm;
 import com.LibSys.OctSky.frontend.layouts.AdminLayout;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -25,6 +27,9 @@ import com.vaadin.flow.router.Route;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 
 import javax.xml.validation.ValidatorHandler;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 @Route(value = "books", layout = AdminLayout.class)
 @PageTitle("Böcker")
@@ -34,16 +39,18 @@ public class ManageBookView extends VerticalLayout {
     ManageBookForm manageBookForm;
     Grid<Book> grid = new Grid<>(Book.class);
 
+    TextField categoryFilter = new TextField();
+    TextField titleFilter = new TextField();
+    TextField isbnFilter = new TextField();
+    TextField writerFilter = new TextField();
+
+    HorizontalLayout filterLayout = new HorizontalLayout(titleFilter, writerFilter, isbnFilter, categoryFilter);
+
     Button add = new Button("Lägg till");
     Button remove = new Button("Ta bort");
-    private final TextField ISBNFilter = new TextField();
-    private final TextField categoryFilter = new TextField();
-    private final TextField titleFilter = new TextField();
-    private final TextField writerFilter = new TextField();
 
     protected SingleSelect<Grid<Book>,Book> selection = grid.asSingleSelect();
     protected HorizontalLayout buttonLayout = new HorizontalLayout();
-    protected HorizontalLayout filterLayout = new HorizontalLayout();
 
     public ManageBookView(BookService bookService)
     {
@@ -51,11 +58,70 @@ public class ManageBookView extends VerticalLayout {
         manageBookForm = new ManageBookForm(bookService, this);
         manageBookForm.setVisible(false);
         this.setSizeFull();
+        remove.setEnabled(false);
+        configureFilter();
         configureButtons();
         populateGrid();
         configureGrid();
-        configureFilterField();
         add(buttonLayout, filterLayout, grid, manageBookForm);
+    }
+
+    public void configureFilter()
+    {
+        String[] filterStrings = new String[]{"titel", "författare", "isbn", "kategori"};
+        TextField[] textFields = new TextField[]{titleFilter, writerFilter, isbnFilter, categoryFilter};
+        for(int i = 0; i < textFields.length; i++)
+        {
+            int finalI = i;
+            textFields[i].setPlaceholder("Sök efter " + filterStrings[i] + " ...");
+            textFields[i].setValueChangeMode(ValueChangeMode.EAGER);
+            textFields[i].addValueChangeListener(e->grid.setItems(filterBy(filterStrings[finalI], textFields[finalI].getValue().toLowerCase())));
+        }
+    }
+
+    public List filterBy(String filter, String str)
+    {
+        List<Book> oldList = bookService.findBooks();
+        ArrayList<Book> newList = new ArrayList<>();
+
+
+        if(filter.equals("kategori")) {
+            for (Book book : oldList) {
+                if (book.getCategory().toLowerCase().contains(str.toLowerCase())) {
+                    newList.add(book);
+                }
+            }
+        }
+        else if(filter.equals("isbn"))
+        {
+            for (Book book : oldList) {
+                if (book.getIsbn().toLowerCase().contains(str.toLowerCase())) {
+                    newList.add(book);
+                }
+            }
+        }
+        else if(filter.equals("titel"))
+        {
+            for(Book book : oldList)
+            {
+                if(book.getTitle().toLowerCase().contains(str.toLowerCase()))
+                {
+                    newList.add(book);
+                }
+            }
+        }
+        else if(filter.equals("författare"))
+        {
+            for(Book book : oldList)
+            {
+                if(book.getWriter().toLowerCase().contains(str.toLowerCase()))
+                {
+                    newList.add(book);
+                }
+            }
+        }
+        return newList;
+
     }
 
     public void populateGrid()
@@ -75,7 +141,7 @@ public class ManageBookView extends VerticalLayout {
 
     public void configureGrid()
     {
-        grid.setColumns("id","title", "writer", "description", "price", "isbn", "dewey", "category", "publisher","categoryId","publisherId", "ebook");
+        grid.setColumns("id","title", "writer", "description", "price", "isbn", "dewey", "category", "publisher","categoryId","publisherId", "ebook", "amount");
         grid.getColumnByKey("title").setHeader("Titel");
         grid.getColumnByKey("writer").setHeader("Författare");
         grid.getColumnByKey("price").setHeader("Pris");
@@ -84,6 +150,7 @@ public class ManageBookView extends VerticalLayout {
         grid.getColumnByKey("category").setHeader("Kategori");
         grid.getColumnByKey("publisher").setHeader("Förlag");
         grid.getColumnByKey("ebook").setHeader("E-bok");
+        grid.getColumnByKey("amount").setHeader("Antal");
         grid.removeColumnByKey("id");
         grid.removeColumnByKey("description");
         grid.removeColumnByKey("categoryId");
@@ -94,26 +161,6 @@ public class ManageBookView extends VerticalLayout {
         grid.getColumnByKey("beskrivning").setHeader("Beskrivning");
         grid.getColumnByKey("title").setWidth("200px");
         grid.getColumnByKey("price").setWidth("30px");
-    }
-
-    public void configureFilterField() {
-        ISBNFilter.setValueChangeMode(ValueChangeMode.EAGER);
-        writerFilter.setValueChangeMode(ValueChangeMode.EAGER);
-        titleFilter.setValueChangeMode(ValueChangeMode.EAGER);
-        categoryFilter.setValueChangeMode(ValueChangeMode.EAGER);
-
-        ISBNFilter.setPlaceholder("Sök efter ISBN...");
-        categoryFilter.setPlaceholder("Sök efter kategori...");
-        titleFilter.setPlaceholder("Sök efter titel...");
-        writerFilter.setPlaceholder("Sök efter författare...");
-
-        ISBNFilter.setClearButtonVisible(true);
-        categoryFilter.setClearButtonVisible(true);
-        titleFilter.setClearButtonVisible(true);
-        writerFilter.setClearButtonVisible(true);
-
-        filterLayout.add(titleFilter, writerFilter, ISBNFilter, categoryFilter);
-
     }
 
 
@@ -141,8 +188,8 @@ public class ManageBookView extends VerticalLayout {
         VerticalLayout verticalLayout = new VerticalLayout();
         HorizontalLayout buttonLayout = new HorizontalLayout();
         Notification notification = new Notification();
-        Button button = new Button("okej");
-        Button cancelbutton = new Button("avbryt");
+        Button button = new Button("Okej");
+        Button cancelbutton = new Button("Avbryt");
         TextField reason = new TextField("");
         Label label = new Label("Skriv en anledning i textfältet");
         button.addClickListener(event ->
@@ -170,14 +217,18 @@ public class ManageBookView extends VerticalLayout {
         manageBookForm.configureForm(state);
     }
 
+
+
     public void selectionHandler()
     {
         if(selection.isEmpty())
         {
+            remove.setEnabled(false);
             formVisibility(false, FormState.None);
         }
         else
         {
+            remove.setEnabled(true);
             formVisibility(true, FormState.Editing);
         }
     }

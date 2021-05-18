@@ -36,6 +36,7 @@ public class AddVisitorView extends VerticalLayout {
         this.addVisitorForm = new AddVisitorForm(visitorService, this);
 
         setSizeFull();
+        removeButton.setEnabled(false);
 
         addVisitorForm.setVisible(false);
         configureGrid();
@@ -90,10 +91,12 @@ public class AddVisitorView extends VerticalLayout {
     {
         if(selection.isEmpty())
         {
+            removeButton.setEnabled(false);
             formVisibility(false, FormState.None);
         }
         else
         {
+            removeButton.setEnabled(true);
             formVisibility(true, FormState.Editing);
         }
     }

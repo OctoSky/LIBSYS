@@ -29,6 +29,7 @@ public class StaffService {
                     rs.getString("phone"),
                     rs.getString("email")));
         }
+
         catch(Exception e)
         {
             return new ArrayList();
@@ -37,9 +38,13 @@ public class StaffService {
     }
 
     public List findRoles () {
-        try {
+
+        try
+        {
             return jdbcTemplate.query("SELECT * FROM Roles", (rs, rowNum) -> new Roles(rs.getInt("id"), rs.getString("roleName")));
-        } catch(Exception e)
+        }
+
+        catch(Exception e)
         {
             return new ArrayList();
         }
@@ -72,10 +77,12 @@ public class StaffService {
 
     }
 
-    public void deleteStaff(int id){
+    public void deleteStaff(int id)
+    {
 
         String sql = "CALL removeStaff(?)";
         jdbcTemplate.update(sql,id);
 
     }
+
 }

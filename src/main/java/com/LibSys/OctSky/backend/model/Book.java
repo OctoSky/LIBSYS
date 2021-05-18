@@ -13,9 +13,10 @@ public class Book {
     int categoryId;
     int publisherId;
     String ebook;
+    int amount;
      public Book(int id, String price, String title, String writer,
                  String isbn, String description, String dewey, String category,
-                 String publisher, int categoryId, int publisherId, String ebook)
+                 String publisher, int categoryId, int publisherId, String ebook, int amount)
      {
 
          this.id = id;
@@ -30,7 +31,16 @@ public class Book {
          this.categoryId = categoryId;
          this.publisherId = publisherId;
          this.ebook = ebook;
+         this.amount = amount;
      }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
 
     public int getCategoryId() {
         return categoryId;
