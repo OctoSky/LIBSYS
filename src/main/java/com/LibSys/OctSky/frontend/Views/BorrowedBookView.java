@@ -15,6 +15,7 @@ public class BorrowedBookView extends VerticalLayout {
     public BorrowedBookView(BookService bookService)
     {
         this.bookService = bookService;
+        this.setSizeFull();
         configureGrid();
         populateGrid();
 
