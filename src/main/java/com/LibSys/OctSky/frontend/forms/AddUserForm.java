@@ -15,6 +15,7 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
+import com.vaadin.flow.data.validator.RegexpValidator;
 
 import java.util.List;
 
@@ -142,7 +143,7 @@ public class AddUserForm extends FormLayout {
     public void configureBinder() {
         staffBinder.forField(firstname).withValidator( firstname -> firstname.length() >= 2, "Förnamn måste vara minst två tecken").bind(Staff::getfirstname,Staff::setfirstname);
         staffBinder.forField(surname).withValidator(surname -> surname.length() >= 2,"Efternamn måste vara minst två tecken").bind(Staff::getsurname,Staff::setsurname);
-        staffBinder.forField(phone).withValidator(phone -> phone.length() >= 10,"Telefonnummer ska vara tio siffror långt").bind(Staff::getphone,Staff::setphone);
+        staffBinder.forField(phone).withValidator( new RegexpValidator("Bara siffror","\\d*")).withValidator(phone -> phone.length() == 10 ,"Telefonnummer ska vara tio siffror långt").bind(Staff::getphone,Staff::setphone);
         staffBinder.forField(email).withValidator(new EmailValidator("Det här är inte en giltig E-post address")).bind(Staff::getemail,Staff::setemail);
 
 
