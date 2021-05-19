@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 
 import java.util.List;
+import java.util.regex.Matcher;
 
 public class AddVisitorForm extends FormLayout {
 
@@ -34,6 +35,7 @@ public class AddVisitorForm extends FormLayout {
     private Button cancelButton = new Button("Avbryt");
     private HorizontalLayout buttonLayout = new HorizontalLayout();
     private Notification notify = new Notification();
+    private Matcher matcher;
 
     private VisitorService visitorService;
     private AddVisitorView addVisitorView;
@@ -167,12 +169,14 @@ public class AddVisitorForm extends FormLayout {
     }
 
     public void configureBinder(){
-        visitorBinder.forField(socialSecurityNumber_Field).withValidator(socialSecurityNumber_Field -> socialSecurityNumber_Field.length() >= 10, "Personnummer måste vara tio siffror långt").bind(Visitor::getSocialsecuritynumber,Visitor::setSocialsecuritynumber);
+        String digitPattern =  "\\d{10}";
+
+        visitorBinder.forField(socialSecurityNumber_Field).withValidator(new RegexpValidator("Bara siffror", "\\d*")).withValidator(socialSecurityNumber_Field -> socialSecurityNumber_Field.length() == 12,"Måste vara 12 siffror långt ").bind(Visitor::getSocialsecuritynumber,Visitor::setSocialsecuritynumber);
         visitorBinder.forField(firstName_Field).withValidator(firstName_Field -> firstName_Field.length() >2,"Förnamn måste vara minst två tecken").bind(Visitor::getFirstname,Visitor::setFirstname);
         visitorBinder.forField(surName_Field).withValidator(surName_Field ->surName_Field.length() > 2,"Efternamn måste vara minst två tecken").bind(Visitor::getSurname,Visitor::setSurname);
         visitorBinder.forField(email_Field).withValidator(new EmailValidator("Det här är inte en giltig E-post address")).bind(Visitor::getEmail, Visitor::setEmail);
 
-        visitorBinder.forField(phone_Field).withValidator(phone_Field -> phone_Field.length() >= 10 ,"Telefonnummer ska vara tio siffror långt").bind(Visitor::getPhone, Visitor::setPhone);
+        visitorBinder.forField(phone_Field).withValidator( new RegexpValidator("Bara siffror","\\d*")).withValidator(phone_Field -> phone_Field.length() == 10 ,"Telefonnummer ska vara tio siffror långt").bind(Visitor::getPhone, Visitor::setPhone);
         visitorBinder.forField(address_Field).bind(Visitor::getAddress, Visitor::setAddress);
 
         visitorBinder.setBean(visitor);
