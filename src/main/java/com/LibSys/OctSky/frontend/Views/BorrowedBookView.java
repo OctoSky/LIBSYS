@@ -3,12 +3,14 @@ package com.LibSys.OctSky.frontend.Views;
 import com.LibSys.OctSky.backend.Service.BookService;
 import com.LibSys.OctSky.backend.model.Book;
 import com.LibSys.OctSky.backend.model.BorrowedBook;
+import com.LibSys.OctSky.frontend.layouts.AdminLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
-@Route(value = "låna")
+@Route(value = "borrow", layout = AdminLayout.class)
 public class BorrowedBookView extends VerticalLayout {
+
     public BookService bookService;
     public Grid<BorrowedBook> grid = new Grid<>(BorrowedBook.class);
 
