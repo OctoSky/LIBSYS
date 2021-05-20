@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -22,22 +23,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery("Select Staff_email, password, enabled " +
-                        " from credentials " +
-                        " where Staff_email = ? ")
-                .authoritiesByUsernameQuery("Select email, role " +
-                        " from getemailrole " +
-                        "where email = ? ");
+                .usersByUsernameQuery("Select Staff_email, password, enabled from credentials where Staff_email = ?")
+                .authoritiesByUsernameQuery("Select email, role from getemailrole where email = ? ");
 
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/admin").hasRole("Admin")
-                .antMatchers("/user").hasAnyRole("Admin", "Librarian")
+                .antMatchers("/visitor").hasRole("ADMIN")
+                .antMatchers("/user").hasAnyRole("ADMIN", "LIBRARIAN")
                 .antMatchers("/").permitAll()
+                .antMatchers("/vaadinServlet/UIDL/**").permitAll()
+                .antMatchers("/vaadinServlet/HEARTBEAT/**").permitAll()
+                .antMatchers("/vaadinServlet/**").permitAll()
+                .antMatchers("/error").permitAll()
                 .and().formLogin();
+        http.csrf().disable();
     }
 
     @Bean
