@@ -58,7 +58,25 @@ public class BookService {
         }
     }
 
+    public List findBorrowedBooks()
+    {
+        String sql = "SELECT * FROM borrowedbooksview";
 
+        try
+        {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new BorrowedBook(rs.getString("title"),
+                    rs.getString("borrowdate"),
+                    rs.getString("returndate"),
+                    rs.getInt("cardNumber"),
+                    rs.getString("firstname"),
+                    rs.getString("surname"),
+                    rs.getString("email")));
+        }
+        catch (Exception e)
+        {
+            return new ArrayList();
+        }
+    }
 
     public List findArchivedBooks()
     {

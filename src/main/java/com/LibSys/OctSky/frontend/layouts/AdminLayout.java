@@ -5,6 +5,7 @@ import com.LibSys.OctSky.frontend.Views.AddUserView;
 import com.LibSys.OctSky.frontend.Views.AddVisitorView;
 import com.LibSys.OctSky.frontend.Views.ArchivedBooksView;
 import com.LibSys.OctSky.frontend.Views.ManageBookView;
+import com.LibSys.OctSky.frontend.Views.*;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -44,8 +45,6 @@ public class AdminLayout extends AppLayout {
         addToNavbar(true, createHeaderContent());
         menu = createMenu();
         addToDrawer(createDrawerContent(menu));
-
-
     }
 
     private Component createHeaderContent() {
@@ -68,8 +67,6 @@ public class AdminLayout extends AppLayout {
         return layout;
     }
 
-
-
     private Component createDrawerContent(Tabs menu) {
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
@@ -84,8 +81,6 @@ public class AdminLayout extends AppLayout {
         logoLayout.add(new H1("LIBSYS_2.0"));
         layout.add(logoLayout, menu);
         return layout;
-
-
     }
 
     private Tabs createMenu() {
@@ -103,7 +98,8 @@ public class AdminLayout extends AppLayout {
                 createTab("Hantera Användare", AddUserView.class),
                 createTab("Hantera Besökare", AddVisitorView.class),
                 createTab("Hantera Böcker", ManageBookView.class),
-                createTab("Arkiverade Böcker", ArchivedBooksView.class)
+                createTab("Arkiverade Böcker", ArchivedBooksView.class),
+                createTab("Lånade Böcker", BorrowedBookView.class)
         };
             }
 

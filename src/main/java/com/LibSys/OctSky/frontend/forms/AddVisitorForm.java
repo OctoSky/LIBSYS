@@ -18,6 +18,7 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.validator.RegexpValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 
@@ -52,7 +53,6 @@ public class AddVisitorForm extends FormLayout {
     {
         this.addVisitorView = addVisitorView;
         this.visitorService = visitorService;
-
         configureBinder();
         configureButtons();
         configureFields();
@@ -169,7 +169,7 @@ public class AddVisitorForm extends FormLayout {
     }
 
     public void configureBinder(){
-        visitorBinder.forField(socialSecurityNumber_Field).bind(Visitor::getSocialsecuritynumber,Visitor::setSocialsecuritynumber);
+        visitorBinder.forField(socialSecurityNumber_Field).withValidator(new RegexpValidator("Bara siffror", "\\d*")).withValidator(socialSecurityNumber_Field -> socialSecurityNumber_Field.length() == 12, "Ett personnummer måste vara 12 siffror").bind(Visitor::getSocialsecuritynumber,Visitor::setSocialsecuritynumber);
         visitorBinder.forField(firstName_Field).bind(Visitor::getFirstname,Visitor::setFirstname);
         visitorBinder.forField(surName_Field).bind(Visitor::getSurname,Visitor::setSurname);
         visitorBinder.forField(email_Field).bind(Visitor::getEmail, Visitor::setEmail);
