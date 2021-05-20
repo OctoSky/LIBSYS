@@ -14,7 +14,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@Route(value = "arkiv", layout = AdminLayout.class)
+@Route(value = "archive", layout = AdminLayout.class)
 @PageTitle("Arkiverade Böcker")
 @CssImport("./views/about/about-view.css")
 public class ArchivedBooksView extends VerticalLayout {

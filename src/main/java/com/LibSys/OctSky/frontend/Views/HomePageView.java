@@ -22,7 +22,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Route(value = "home", layout = VisitorLayout.class)
+@Route(value = "", layout = VisitorLayout.class)
 public class HomePageView extends VerticalLayout {
 
 BookService bookService;
