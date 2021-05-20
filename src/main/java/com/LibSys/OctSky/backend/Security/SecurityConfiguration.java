@@ -24,9 +24,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery("Select Staff_email, password, enabled from credentials where Staff_email = ?")
-                .authoritiesByUsernameQuery("Select email, role from getemailrole where email = ? ")
-                .usersByUsernameQuery("Select Visitor_cardNumber, password, enabled from visitorcredentials where Visitor_cardNumber = ?")
-                .authoritiesByUsernameQuery("Select cardNumber, role from getcardrole where cardNumber = ? ");
+                .authoritiesByUsernameQuery("Select email, role from staffauthview where email = ? ");
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .usersByUsernameQuery("Select librarycard_cardNumber, password, enabled from visitorcredentials where librarycard_cardNumber = ?")
+                .authoritiesByUsernameQuery("Select librarycard_cardNumber, role from visitorauthview where librarycard_cardNumber = ? ");
+
 
     }
 
@@ -34,6 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/visitor").hasRole("ADMIN")
+                .antMatchers("/archive").hasAnyRole("ADMIN", "MEMBER", "LIBRARIAN")
                 .antMatchers("/user").hasAnyRole("ADMIN", "LIBRARIAN")
                 .antMatchers("/").permitAll()
                 .antMatchers("/vaadinServlet/UIDL/**").permitAll()

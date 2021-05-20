@@ -55,9 +55,16 @@ public class VisitorService {
         jdbcTemplate.update(sql, visitorid, SSN, vfirstname, vsurname, vemail, vphone, vaddress, enc_pass);
     }
 
-    public void addVisitor(String ssn, String firstname, String surname, String email, String phone, String address, String encrypt_pass)
+    public void addVisitor(String ssn,
+                           String firstname,
+                           String surname,
+                           String email,
+                           String phone,
+                           String address,
+                           String encrypt_pass,
+                           String pass_in)
     {
-        String sql = "CALL addVisitor(?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, ssn, firstname, surname, email, phone, address, encrypt_pass);
+        String sql = "CALL addVisitor(?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, ssn, firstname, surname, email, phone, address, pass_in, encrypt_pass);
     }
 }

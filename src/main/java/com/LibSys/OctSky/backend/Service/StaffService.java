@@ -71,9 +71,14 @@ public class StaffService {
         }
     }
 
-    public void addStaff(String firstName, String surName, String phone, String email, int role, String password, String encrypt_pass){
-        String sql = "CALL addstaff(?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql,firstName,surName,phone,email,role,password, encrypt_pass);
+    public void addStaff(String firstName,
+                         String surName,
+                         String phone,
+                         String email,
+                         int role,
+                         String password){
+        String sql = "CALL addstaff(?,?,?,?,?,?)";
+        jdbcTemplate.update(sql,firstName,surName,phone,email,role,password);
 
     }
 
