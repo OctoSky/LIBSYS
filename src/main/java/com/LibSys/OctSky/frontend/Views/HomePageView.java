@@ -153,7 +153,7 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
         grid.addComponentColumn(item -> createDescriptionButton(item))
                 .setKey("beskrivning");
 
-        if (isUserLoggedIn()) {
+        if (isUserLoggedIn() && getUserRole().equals("[ROLE_MEMBER]")) {
             grid.addComponentColumn(item -> createBorrowButton(item)).setKey("borrow");
             grid.getColumnByKey("borrow").setHeader("");
         }
@@ -225,6 +225,13 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
         String currentUserName = authentication.getName();
         int cardNumber = Integer.parseInt(currentUserName.trim());
         return cardNumber;
+    }
+
+    public String getUserRole()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentRole = authentication.getAuthorities().toString();
+        return currentRole;
     }
 
 }
