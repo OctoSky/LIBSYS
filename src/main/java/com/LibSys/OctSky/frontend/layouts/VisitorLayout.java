@@ -29,24 +29,28 @@ import java.util.Optional;
 public class VisitorLayout extends AppLayout {
 
     private H1 viewTitle;
-    private final Tabs menu;
     public VisitorLayout() {
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
-        menu = createMenu();
-        addToDrawer(createDrawerContent(menu));
+
     }
 
     private Component createHeaderContent() {
+        H1 h1 = new H1("Bibliotek");
+        h1.setWidth("200px");
+        h1.setHeight("200px");
         HorizontalLayout layout = new HorizontalLayout();
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setSizeFull();
+        verticalLayout.add(h1);
+        verticalLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, h1);
         layout.setId("header");
         layout.getThemeList().set("dark", true);
         layout.setWidthFull();
         layout.setSpacing(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
-        layout.add(new DrawerToggle());
         viewTitle = new H1();
-        layout.add(viewTitle);
+        layout.add(verticalLayout);
         layout.add(new Avatar());
         return layout;
     }
@@ -91,18 +95,6 @@ public class VisitorLayout extends AppLayout {
         tab.add(new RouterLink(text, navigationTarget));
         ComponentUtil.setData(tab, Class.class, navigationTarget);
         return tab;
-    }
-
-    @Override
-    protected void afterNavigation() {
-        super.afterNavigation();
-        getTabForComponent(getContent()).ifPresent(menu::setSelectedTab);
-        viewTitle.setText(getCurrentPageTitle());
-    }
-
-    private Optional<Tab> getTabForComponent(Component component) {
-        return menu.getChildren().filter(tab -> ComponentUtil.getData(tab, Class.class).equals(component.getClass()))
-                .findFirst().map(Tab.class::cast);
     }
 
     private String getCurrentPageTitle() {

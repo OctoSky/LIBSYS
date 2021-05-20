@@ -18,6 +18,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,20 +33,29 @@ Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
     private Availability availabilityJa = new Availability("Tillgänglig");
     private Availability availabilityNo = new Availability("Utlånad");
 
+    private VerticalLayout windowLayout = new VerticalLayout();
+
     TextField titleFilter = new TextField();
     TextField writerFilter = new TextField();
     TextField deweyFilter = new TextField();
     ComboBox<Availability> amountFilter = new ComboBox<>();
-
+    private VerticalLayout layoutCeption = new VerticalLayout();
     HorizontalLayout filterLayout = new HorizontalLayout(titleFilter, writerFilter, deweyFilter, amountFilter);
 
     public HomePageView(BookService bookService) {
         this.bookService = bookService;
         this.setSizeFull();;
+        windowLayout.add(grid);
+        windowLayout.setSizeFull();
+        windowLayout.setHorizontalComponentAlignment(Alignment.CENTER, grid);
+        grid.setWidth("1500px");
+        grid.setHeight("600px");
         populateGrid();
         configureGrid();
         configureFilter();
-        this.add(filterLayout, grid);
+        layoutCeption.add(filterLayout);
+        layoutCeption.setHorizontalComponentAlignment(Alignment.CENTER, filterLayout);
+        this.add(layoutCeption, windowLayout);
     }
 
 
@@ -135,6 +145,8 @@ Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
         grid.addComponentColumn(item -> createDescriptionButton(item))
                 .setKey("beskrivning");
         grid.getColumnByKey("beskrivning").setHeader("Beskrivning");
+        grid.getColumnByKey("title").setAutoWidth(true);
+        grid.getColumnByKey("ebook").setAutoWidth(true);
     }
 
     public Button createDescriptionButton(VisitorBook item)
