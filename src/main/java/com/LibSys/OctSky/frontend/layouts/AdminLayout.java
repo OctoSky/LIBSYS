@@ -11,6 +11,7 @@ import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -35,10 +36,14 @@ public class AdminLayout extends AppLayout {
         addToNavbar(true, createHeaderContent());
         menu = createMenu();
         addToDrawer(createDrawerContent(menu));
+
+
     }
 
     private Component createHeaderContent() {
         HorizontalLayout layout = new HorizontalLayout();
+        Anchor logout = new Anchor("logout", "Log out");
+
         layout.setId("header");
         layout.getThemeList().set("dark", true);
         layout.setWidthFull();
@@ -47,9 +52,12 @@ public class AdminLayout extends AppLayout {
         layout.add(new DrawerToggle());
         viewTitle = new H1();
         layout.add(viewTitle);
-        layout.add(new Avatar());
+        layout.add(logout);
+        layout.expand(viewTitle);
         return layout;
     }
+
+
 
     private Component createDrawerContent(Tabs menu) {
         VerticalLayout layout = new VerticalLayout();
@@ -65,6 +73,8 @@ public class AdminLayout extends AppLayout {
         logoLayout.add(new H1("LIBSYS_2.0"));
         layout.add(logoLayout, menu);
         return layout;
+
+
     }
 
     private Tabs createMenu() {
