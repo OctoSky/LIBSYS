@@ -112,7 +112,6 @@ public class VisitorLayout extends AppLayout {
     public String getUserRole()
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserName = authentication.getName();
         String currentRole = authentication.getAuthorities().toString();
         return currentRole;
     }
