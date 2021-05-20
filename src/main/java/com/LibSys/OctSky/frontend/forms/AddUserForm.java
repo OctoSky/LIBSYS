@@ -33,6 +33,7 @@ public class AddUserForm extends FormLayout {
     private Button clearButton = new Button("Rensa");
     private Button cancelButton = new Button("Avbryt");
     private Button addButton = new Button("Lägg till");
+
     protected HorizontalLayout buttonLayout = new HorizontalLayout();
     protected HorizontalLayout buttonLayoutAdding = new HorizontalLayout();
 
@@ -46,7 +47,6 @@ public class AddUserForm extends FormLayout {
     public AddUserForm(StaffService staffService, AddUserView addUserView) {
         this.staffService = staffService;
         this.addUserView = addUserView;
-
         phone.setMaxLength(10);
 
         configureBinder();
@@ -62,17 +62,18 @@ public class AddUserForm extends FormLayout {
         {
             clearForm();
             buttonLayout = buttonsAdding();
+            add(firstname, surname, phone, email, rolesComboBox, passwordField, buttonLayout);
         }
         else if(formState == FormState.Editing)
         {
             fillForm();
             buttonLayout = buttonsEditing();
+            add(firstname, surname, phone, email, rolesComboBox, buttonLayout);
         }
         else
         {
             this.setVisible(false);
         }
-        add(firstname, surname, phone, email, rolesComboBox, passwordField, buttonLayout);
     }
     public HorizontalLayout buttonsAdding()
     {
@@ -134,7 +135,7 @@ public class AddUserForm extends FormLayout {
     }
 
     public void addStaff(){
-        staffService.addStaff(firstname.getValue(),surname.getValue(),phone.getValue(),email.getValue(),rolesComboBox.getValue().getRoleId(),passwordField.getValue(), "YaBoiKa");
+        staffService.addStaff(firstname.getValue(),surname.getValue(),phone.getValue(),email.getValue(),rolesComboBox.getValue().getRoleId(),passwordField.getValue());
         addUserView.populateGrid();
         this.setVisible(false);
     }
@@ -164,8 +165,7 @@ public class AddUserForm extends FormLayout {
         newList.get(0).setRoleId(1);
         newList.get(1).setRoleName("Bibliotekarie");
         newList.get(1).setRoleId(2);
-        newList.get(2).setRoleName("Kund");
-        newList.get(2).setRoleId(3);
+        newList.remove(2);
         return newList;
     }
 }

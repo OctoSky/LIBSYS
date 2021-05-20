@@ -1,5 +1,10 @@
 package com.LibSys.OctSky.frontend.layouts;
 
+import com.LibSys.OctSky.backend.Service.StaffService;
+import com.LibSys.OctSky.frontend.Views.AddUserView;
+import com.LibSys.OctSky.frontend.Views.AddVisitorView;
+import com.LibSys.OctSky.frontend.Views.ArchivedBooksView;
+import com.LibSys.OctSky.frontend.Views.ManageBookView;
 import com.LibSys.OctSky.frontend.Views.*;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
@@ -8,6 +13,7 @@ import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -18,7 +24,11 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Map;
 import java.util.Optional;
 
 @JsModule("./styles/shared-styles.js")
@@ -27,7 +37,10 @@ public class AdminLayout extends AppLayout {
 
     private H1 viewTitle;
     private final Tabs menu;
-    public AdminLayout() {
+    private StaffService staffService;
+
+    public AdminLayout(StaffService staffService) {
+        this.staffService = staffService;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         menu = createMenu();
@@ -35,7 +48,11 @@ public class AdminLayout extends AppLayout {
     }
 
     private Component createHeaderContent() {
+        Avatar avatar = new Avatar();
         HorizontalLayout layout = new HorizontalLayout();
+        Anchor logout = new Anchor("logout", "Logga ut");
+        logout.setWidth("80px");
+        avatar.setName(getFullName());
         layout.setId("header");
         layout.getThemeList().set("dark", true);
         layout.setWidthFull();
@@ -44,7 +61,9 @@ public class AdminLayout extends AppLayout {
         layout.add(new DrawerToggle());
         viewTitle = new H1();
         layout.add(viewTitle);
-        layout.add(new Avatar());
+        layout.add(logout);
+        layout.expand(viewTitle);
+        layout.add(avatar);
         return layout;
     }
 
@@ -108,4 +127,53 @@ public class AdminLayout extends AppLayout {
         return title == null ? "" : title.value();
     }
 
+
+    public String getFullName()
+    {
+        String name = "";
+        if(getUserRole().equals("[ROLE_ADMIN]") || getUserRole().equals("[ROLE_LIBRARIAN]")) {
+            Map<String, Object> out = staffService.searchUsersWithEmail(getUserName());
+            String firstname = (String) out.get("firstname_out");
+            String surname = (String) out.get("surname_out");
+            name =  firstname + " " + surname;
+        }
+        else if(getUserRole().equals("[ROLE_MEMBER]"))
+        {
+            Map<String, Object> out2 = staffService.searchUsersWithCard(getUserNumber());
+            String firstname = (String) out2.get("firstname_out");
+            String surname = (String) out2.get("surname_out");
+            name = firstname + " " + surname;
+        }
+        return name;
+    }
+
+    public String getUserName()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        return currentUserName;
+    }
+    public int getUserNumber()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        int cardNumber = Integer.parseInt(currentUserName.trim());
+        return cardNumber;
+    }
+    public String getUserRole()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        String currentRole = authentication.getAuthorities().toString();
+        return currentRole;
+    }
+
+    static boolean isUserLoggedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = false;
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated()) {
+            isLoggedIn = true;
+        }
+        return isLoggedIn;
+    }
 }

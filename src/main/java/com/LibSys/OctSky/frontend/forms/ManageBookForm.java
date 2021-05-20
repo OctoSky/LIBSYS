@@ -28,8 +28,8 @@ public class ManageBookForm extends FormLayout {
     private ComboBox<Publisher> publisherComboBox = new ComboBox<Publisher>("Utgivare");
     private ComboBox<Category> categoryComboBox = new ComboBox<Category>("Kategori");
 
-    private Ebook ebookJa = new Ebook("ja");
-    private Ebook ebookNej = new Ebook("nej");
+    private Ebook ebookJa = new Ebook("Ja");
+    private Ebook ebookNej = new Ebook("Nej");
     private ArrayList<Ebook> ebooks = new ArrayList<>();
 
     private Button add = new Button("Lägg till");

@@ -15,6 +15,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.Autocomplete;
 import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.RegexpValidator;
@@ -43,6 +44,7 @@ public class AddVisitorForm extends FormLayout {
     private EmailField email_Field = new EmailField("E-postadress");
     private TextField phone_Field = new TextField("Telefonnr");
     private TextField address_Field = new TextField("Adress");
+    private PasswordField passwordField = new PasswordField("Lösenord");
 
     private Binder<Visitor> visitorBinder = new Binder<>(Visitor.class);
     private Visitor visitor = new Visitor(0, 0,"", "", "",""," ", "");
@@ -99,7 +101,8 @@ public class AddVisitorForm extends FormLayout {
                         email_Field.getValue(),
                         phone_Field.getValue(),
                         address_Field.getValue(),
-                        "enc_password_super_secure123");
+                        "enc_password_super_secure123",
+                        passwordField.getValue());
             }
             else if(!StringUtils.isNumeric(phone_Field.getValue()))
             {
@@ -125,22 +128,23 @@ public class AddVisitorForm extends FormLayout {
 
     public void configureForm(FormState formState)
     {
-        remove(socialSecurityNumber_Field,firstName_Field,surName_Field,email_Field, phone_Field, address_Field, buttonLayout);
+        remove(socialSecurityNumber_Field,firstName_Field,surName_Field,email_Field, phone_Field, address_Field,passwordField, buttonLayout);
         if(formState == FormState.Adding)
         {
             clearForm();
             buttonLayout = buttonsAdding();
+            add(socialSecurityNumber_Field,firstName_Field,surName_Field,email_Field, phone_Field, passwordField, address_Field, buttonLayout);
         }
         else if(formState == FormState.Editing)
         {
             fillForm();
             buttonLayout = buttonsEditing();
+            add(socialSecurityNumber_Field,firstName_Field,surName_Field,email_Field, phone_Field, address_Field, buttonLayout);
         }
         else
         {
             this.setVisible(false);
         }
-        add(socialSecurityNumber_Field,firstName_Field,surName_Field,email_Field, phone_Field, address_Field, buttonLayout);
     }
 
     public HorizontalLayout buttonsAdding()

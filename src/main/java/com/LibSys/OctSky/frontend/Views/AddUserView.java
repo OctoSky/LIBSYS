@@ -19,7 +19,7 @@ import com.vaadin.flow.router.Route;
 import java.util.ArrayList;
 import java.util.List;
 
-@Route(value = "", layout = AdminLayout.class)
+@Route(value = "user", layout = AdminLayout.class)
 @PageTitle("Användare")
 @CssImport("./views/about/about-view.css")
 public class AddUserView extends VerticalLayout {
