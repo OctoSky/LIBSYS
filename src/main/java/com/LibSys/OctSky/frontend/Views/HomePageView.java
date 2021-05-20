@@ -201,6 +201,7 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
             verticalLayout.add(textLabel,horizontalLayout);
             notify.setPosition(Notification.Position.MIDDLE);
             notify.open();
+            populateGrid();
         });
 
         return borrowButton;
