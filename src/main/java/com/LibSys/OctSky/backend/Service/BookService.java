@@ -43,6 +43,7 @@ public class BookService {
         String sql = "SELECT * FROM visitorbookview";
         try {
             return jdbcTemplate.query(sql, (rs, rowNum) -> new VisitorBook(
+                    rs.getInt("id"),
                     rs.getString("title"),
                     rs.getString("writer"),
                     rs.getString("description"),
@@ -56,6 +57,11 @@ public class BookService {
         {
             return new ArrayList();
         }
+    }
+
+    public void borrowBook(int bookId, int cardNumber, String dateToday, String returnDate) {
+        String sql = "CALL borrowbook(?,?,?,?)";
+        jdbcTemplate.update(sql, bookId, cardNumber, dateToday, returnDate);
     }
 
     public List findBorrowedBooks()

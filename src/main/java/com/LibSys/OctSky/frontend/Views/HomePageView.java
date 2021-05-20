@@ -5,6 +5,7 @@ import com.LibSys.OctSky.backend.model.Availability;
 import com.LibSys.OctSky.backend.model.Book;
 import com.LibSys.OctSky.backend.model.Ebook;
 import com.LibSys.OctSky.backend.model.VisitorBook;
+import com.LibSys.OctSky.frontend.layouts.AdminLayout;
 import com.LibSys.OctSky.frontend.layouts.VisitorLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -17,16 +18,22 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 @Route(value = "", layout = VisitorLayout.class)
 public class HomePageView extends VerticalLayout {
 
-BookService bookService;
-Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
+private BookService bookService;
+private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
 
     ArrayList<Availability> availabilities = new ArrayList<>();
     private Availability availabilityAll = new Availability("Alla");
@@ -133,7 +140,7 @@ Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
     }
 
     private void configureGrid() {
-        grid.setColumns("title", "writer", "description", "category", "publisher", "dewey", "ebook", "amount");
+        grid.setColumns("id","title", "writer", "description", "category", "publisher", "dewey", "ebook", "amount");
         grid.getColumnByKey("title").setHeader("Titel");
         grid.getColumnByKey("writer").setHeader("Författare");
         grid.getColumnByKey("category").setHeader("Kategori");
@@ -141,9 +148,16 @@ Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
         grid.getColumnByKey("dewey").setHeader("Placering");
         grid.getColumnByKey("ebook").setHeader("Finns som E-bok");
         grid.getColumnByKey("amount").setHeader("Tillgänglig");
+        grid.removeColumnByKey("id");
         grid.removeColumnByKey("description");
         grid.addComponentColumn(item -> createDescriptionButton(item))
                 .setKey("beskrivning");
+
+        if (isUserLoggedIn()) {
+            grid.addComponentColumn(item -> createBorrowButton(item)).setKey("borrow");
+            grid.getColumnByKey("borrow").setHeader("");
+        }
+
         grid.getColumnByKey("beskrivning").setHeader("Beskrivning");
         grid.getColumnByKey("title").setAutoWidth(true);
         grid.getColumnByKey("ebook").setAutoWidth(true);
@@ -166,8 +180,50 @@ Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
 
         return button;
     }
+
+    public Button createBorrowButton(VisitorBook item)
+    {
+        VerticalLayout verticalLayout = new VerticalLayout();
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        HorizontalLayout fillerLayout = new HorizontalLayout();
+        String today = LocalDate.now(ZoneId.of("GMT+2")).toString();
+        String monthForward = LocalDate.parse(today).plusMonths(1).toString();
+        Label textLabel = new Label("Boken lånad fram till " + monthForward);
+        Button closeButton = new Button("Ok");
+        Notification notify = new Notification(verticalLayout);
+        closeButton.addClickListener(click -> notify.close());
+        int currentUserCardNo = getUserNumber();
+
+        Button borrowButton = new Button("Låna", clickEvent -> {
+            bookService.borrowBook(item.getId(), currentUserCardNo, today, monthForward);
+            fillerLayout.setWidth("75px");
+            horizontalLayout.add(fillerLayout,closeButton);
+            verticalLayout.add(textLabel,horizontalLayout);
+            notify.setPosition(Notification.Position.MIDDLE);
+            notify.open();
+        });
+
+        return borrowButton;
+    }
     private void populateGrid() {
         grid.setItems(bookService.findVisitorBooks());
+    }
+
+    static boolean isUserLoggedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isLoggedIn = false;
+        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated()) {
+            isLoggedIn = true;
+        }
+        return isLoggedIn;
+    }
+
+    public int getUserNumber()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        int cardNumber = Integer.parseInt(currentUserName.trim());
+        return cardNumber;
     }
 
 }
