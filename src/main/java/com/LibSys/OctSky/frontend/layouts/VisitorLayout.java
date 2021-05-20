@@ -1,6 +1,7 @@
 package com.LibSys.OctSky.frontend.layouts;
 
 import com.LibSys.OctSky.backend.Security.SecurityUtils;
+import com.LibSys.OctSky.backend.Service.StaffService;
 import com.LibSys.OctSky.frontend.Views.AddUserView;
 import com.LibSys.OctSky.frontend.Views.AddVisitorView;
 import com.LibSys.OctSky.frontend.Views.ArchivedBooksView;
@@ -28,17 +29,21 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Map;
 import java.util.Optional;
 
 @JsModule("./styles/shared-styles.js")
 @CssImport("./views/main/main-view.css")
 public class VisitorLayout extends AppLayout {
-    public VisitorLayout() {
+    StaffService staffService;
+    public VisitorLayout(StaffService staffService) {
+        this.staffService = staffService;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
     }
 
     private Component createHeaderContent() {
+        Avatar avatar = new Avatar();
         Anchor logout = new Anchor("logout", "Logga ut");
         Anchor login = new Anchor("login", "Logga in");
         VerticalLayout fillLayout = new VerticalLayout();
@@ -66,8 +71,50 @@ public class VisitorLayout extends AppLayout {
         {
             layout.add(login);
         }
-        layout.add(new Avatar());
+        avatar.setName(getFullName());
+        System.out.println(getFullName());
+        layout.add(avatar);
         return layout;
+    }
+
+    public String getFullName()
+    {
+        String name = "";
+        if(getUserRole().equals("[ROLE_ADMIN]") || getUserRole().equals("[ROLE_LIBRARIAN]")) {
+            Map<String, Object> out = staffService.searchUsersWithEmail(getUserName());
+            String firstname = (String) out.get("firstname_out");
+            String surname = (String) out.get("surname_out");
+            name =  firstname + " " + surname;
+        }
+        else if(getUserRole().equals("[ROLE_MEMBER]"))
+        {
+            Map<String, Object> out2 = staffService.searchUsersWithCard(getUserNumber());
+            String firstname = (String) out2.get("firstname_out");
+            String surname = (String) out2.get("surname_out");
+            name = firstname + " " + surname;
+        }
+        return name;
+    }
+
+    public String getUserName()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        return currentUserName;
+    }
+    public int getUserNumber()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        int cardNumber = Integer.parseInt(currentUserName.trim());
+        return cardNumber;
+    }
+    public String getUserRole()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        String currentRole = authentication.getAuthorities().toString();
+        return currentRole;
     }
 
     static boolean isUserLoggedIn() {

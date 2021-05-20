@@ -6,16 +6,42 @@ import com.LibSys.OctSky.backend.model.Roles;
 import com.LibSys.OctSky.backend.model.Staff;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class StaffService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    public Map<String, Object> searchUsersWithEmail(String email)
+    {
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("getNameFromEmail");
+
+        Map<String, Object> out = jdbcCall.execute(
+                new MapSqlParameterSource("staff_email_in", email));
+
+        return out;
+    }
+
+    public Map<String, Object> searchUsersWithCard(int card)
+    {
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("getNameFromCard");
+
+        Map<String, Object> out = jdbcCall.execute(
+                new MapSqlParameterSource("cardnumber_in", card));
+
+        return out;
+    }
+
 
     public List findStaff(){
 
@@ -70,6 +96,7 @@ public class StaffService {
             return new ArrayList();
         }
     }
+
 
     public void addStaff(String firstName,
                          String surName,
