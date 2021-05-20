@@ -28,7 +28,6 @@ import java.util.Optional;
 @CssImport("./views/main/main-view.css")
 public class VisitorLayout extends AppLayout {
 
-    private H1 viewTitle;
     public VisitorLayout() {
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
@@ -49,57 +48,9 @@ public class VisitorLayout extends AppLayout {
         layout.setWidthFull();
         layout.setSpacing(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
-        viewTitle = new H1();
         layout.add(verticalLayout);
         layout.add(new Avatar());
         return layout;
-    }
-
-    private Component createDrawerContent(Tabs menu) {
-        VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
-        layout.setPadding(false);
-        layout.setSpacing(false);
-        layout.getThemeList().set("spacing-s", true);
-        layout.setAlignItems(FlexComponent.Alignment.STRETCH);
-        HorizontalLayout logoLayout = new HorizontalLayout();
-        logoLayout.setId("logo");
-        logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "LIBSYS_2.0 logo"));
-        logoLayout.add(new H1("LIBSYS_2.0"));
-        layout.add(logoLayout, menu);
-        return layout;
-    }
-
-    private Tabs createMenu() {
-        final Tabs tabs = new Tabs();
-        tabs.setOrientation(Tabs.Orientation.VERTICAL);
-        tabs.addThemeVariants(TabsVariant.LUMO_MINIMAL);
-        tabs.setId("tabs");
-        tabs.add(createMenuItems());
-        return tabs;
-    }
-
-
-    private Component[] createMenuItems() {
-        return new Tab[]{
-                createTab("Hantera Användare", AddUserView.class), //TODO rätt flikar, rätt views
-                createTab("Hantera Besökare", AddVisitorView.class),
-                createTab("Hantera Böcker", ManageBookView.class),
-                createTab("Arkiverade Böcker", ArchivedBooksView.class)
-        };
-    }
-
-    private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
-        final Tab tab = new Tab();
-        tab.add(new RouterLink(text, navigationTarget));
-        ComponentUtil.setData(tab, Class.class, navigationTarget);
-        return tab;
-    }
-
-    private String getCurrentPageTitle() {
-        PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
-        return title == null ? "" : title.value();
     }
 
 }
