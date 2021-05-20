@@ -11,6 +11,10 @@ vaadin-app-layout[dir='rtl'] #header vaadin-avatar {
   margin-right: auto;
 }
 #header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+#header h2 {
   font-size: 40px;
   margin: 0;
 }
@@ -23,7 +27,7 @@ vaadin-app-layout[dir='rtl'] #header vaadin-avatar {
   height: calc(var(--lumo-size-l) * 1.5);
 }
 #logo h1 {
-  font-size: 40px;
+  font-size: 24px;
   font-weight: 600;
   margin: 0 var(--lumo-space-s);
 }

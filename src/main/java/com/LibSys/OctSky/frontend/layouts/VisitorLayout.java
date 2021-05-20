@@ -12,6 +12,7 @@ import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -35,9 +36,7 @@ public class VisitorLayout extends AppLayout {
     }
 
     private Component createHeaderContent() {
-        H1 h1 = new H1("Bibliotek");
-        h1.setWidth("200px");
-        h1.setHeight("200px");
+        H2 h1 = new H2("October Sky's Bibliotek");
         HorizontalLayout layout = new HorizontalLayout();
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setSizeFull();
