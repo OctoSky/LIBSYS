@@ -8,6 +8,7 @@ import com.LibSys.OctSky.backend.model.VisitorBook;
 import com.LibSys.OctSky.frontend.layouts.AdminLayout;
 import com.LibSys.OctSky.frontend.layouts.VisitorLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
@@ -125,6 +126,10 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
                 if (amountFilter.getValue().getOptions().equals("Tillgänglig")) {
                     str = "Ja";
                   }
+                if(amountFilter.getValue().getOptions().equals("Utlånad"))
+                {
+                    str = "Nej";
+                }
                 if(amountFilter.getValue().getOptions().equals("Alla"))
                 {
                     newList.add(book);
@@ -140,6 +145,8 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
     }
 
     private void configureGrid() {
+
+        grid.setSelectionMode(Grid.SelectionMode.NONE);
         grid.setColumns("id","title", "writer", "description", "category", "publisher", "dewey", "ebook", "amount");
         grid.getColumnByKey("title").setHeader("Titel");
         grid.getColumnByKey("writer").setHeader("Författare");
@@ -203,8 +210,9 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
             notify.open();
             populateGrid();
         });
-        if(item.getAmount().equals("Utlånad"))
+        if(item.getAmount().equals("Nej"))
         {
+            borrowButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
             borrowButton.setEnabled(false);
         }
 

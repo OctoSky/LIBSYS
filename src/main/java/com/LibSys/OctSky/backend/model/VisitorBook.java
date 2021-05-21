@@ -95,7 +95,7 @@ public class VisitorBook {
             returnValue =  "Ja";
         }
         else {
-            returnValue = "Utlånad";
+            returnValue = "Nej";
         }
         return returnValue;
     }
