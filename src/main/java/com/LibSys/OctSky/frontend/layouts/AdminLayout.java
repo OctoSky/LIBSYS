@@ -88,14 +88,30 @@ public class AdminLayout extends AppLayout {
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.addThemeVariants(TabsVariant.LUMO_MINIMAL);
         tabs.setId("tabs");
-        tabs.add(createMenuItems());
+        if(getUserRole().equals("[ROLE_ADMIN]")) {
+            tabs.add(createAdminItems());
+        }
+        if(getUserRole().equals("[ROLE_LIBRARIAN]"))
+        {
+            tabs.add(createLibrarianItems());
+        }
         return tabs;
     }
 
 
-    private Component[] createMenuItems() {
+    private Component[] createAdminItems() {
+        return new Tab[]
+                {
+                        createTab("Hantera Användare", AddUserView.class),
+                        createTab("Hantera Besökare", AddVisitorView.class),
+                        createTab("Hantera Böcker", ManageBookView.class),
+                        createTab("Arkiverade Böcker", ArchivedBooksView.class),
+                        createTab("Lånade Böcker", BorrowedBookView.class)
+                };
+    }
+
+    private Component[] createLibrarianItems() {
         return new Tab[]{
-                createTab("Hantera Användare", AddUserView.class),
                 createTab("Hantera Besökare", AddVisitorView.class),
                 createTab("Hantera Böcker", ManageBookView.class),
                 createTab("Arkiverade Böcker", ArchivedBooksView.class),

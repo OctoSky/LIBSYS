@@ -47,7 +47,7 @@ public class AddVisitorForm extends FormLayout {
     private PasswordField passwordField = new PasswordField("Lösenord");
 
     private Binder<Visitor> visitorBinder = new Binder<>(Visitor.class);
-    private Visitor visitor = new Visitor(0, 0,"", "", "",""," ", "");
+    private Visitor visitor = new Visitor(0,0, 0,"", "", "",""," ", "");
 
     public AddVisitorForm(VisitorService visitorService, AddVisitorView addVisitorView)
     {
@@ -163,7 +163,7 @@ public class AddVisitorForm extends FormLayout {
 
     public void clearForm()
     {
-        Visitor visitor = new Visitor(0, 0,"", "", "", "", "", "");
+        Visitor visitor = new Visitor(0,0, 0,"", "", "", "", "", "");
         visitorBinder.setBean(visitor);
 
     }

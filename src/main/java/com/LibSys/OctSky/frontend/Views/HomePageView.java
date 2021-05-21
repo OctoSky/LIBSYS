@@ -203,6 +203,10 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
             notify.open();
             populateGrid();
         });
+        if(item.getAmount().equals("Utlånad"))
+        {
+            borrowButton.setEnabled(false);
+        }
 
         return borrowButton;
     }

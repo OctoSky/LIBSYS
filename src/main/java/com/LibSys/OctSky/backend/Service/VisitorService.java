@@ -18,7 +18,7 @@ public class VisitorService {
         String sql = "SELECT * FROM visitorview";
         try {
             return jdbcTemplate.query(sql, (rs, rowNum) ->
-                    new Visitor(
+                    new Visitor(rs.getInt("roles_id"),
                             rs.getInt("visitorNumber"),
                     rs.getInt("cardNumber"),
                     rs.getString("ssn"),
