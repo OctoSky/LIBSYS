@@ -188,7 +188,7 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
         HorizontalLayout fillerLayout = new HorizontalLayout();
         String today = LocalDate.now(ZoneId.of("GMT+2")).toString();
         String monthForward = LocalDate.parse(today).plusMonths(1).toString();
-        Label textLabel = new Label("Boken lånad fram till " + monthForward);
+        Label textLabel = new Label(item.getTitle() + " lånad fram till " + monthForward);
         Button closeButton = new Button("Ok");
         Notification notify = new Notification(verticalLayout);
         closeButton.addClickListener(click -> notify.close());
