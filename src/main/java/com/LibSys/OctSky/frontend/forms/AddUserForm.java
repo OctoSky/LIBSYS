@@ -166,6 +166,10 @@ public class AddUserForm extends FormLayout {
         newList.get(1).setRoleName("Bibliotekarie");
         newList.get(1).setRoleId(2);
         newList.remove(2);
+        newList.remove(2);
+        newList.remove(2);
+        newList.remove(2);
+        System.out.println(newList.size());
         return newList;
     }
 }
