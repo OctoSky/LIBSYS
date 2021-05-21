@@ -1,6 +1,7 @@
 package com.LibSys.OctSky.backend.model;
 
 public class BorrowedBook {
+    int id;
     String title;
     String borrowdate;
     String returndate;
@@ -9,8 +10,9 @@ public class BorrowedBook {
     String surname;
     String email;
 
-    public BorrowedBook(String title, String borrowdate, String returndate, int cardnumber, String firstname, String surname, String email)
+    public BorrowedBook(int id, String title, String borrowdate, String returndate, int cardnumber, String firstname, String surname, String email)
     {
+        this.id = id;
         this.title = title;
         this.borrowdate = borrowdate;
         this.returndate = returndate;
@@ -18,6 +20,14 @@ public class BorrowedBook {
         this.firstname = firstname;
         this.surname = surname;
         this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {

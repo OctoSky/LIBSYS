@@ -36,6 +36,12 @@ public class VisitorService {
         }
     }
 
+    public void disableCard(int cardnumber, int roleid)
+    {
+        String sql = "CALL disablecard(?,?)";
+        jdbcTemplate.update(sql, cardnumber, roleid);
+    }
+
     public void deleteVisitor(int visitorNumber)
     {
         String sql = "CALL deleteVisitor (?)";

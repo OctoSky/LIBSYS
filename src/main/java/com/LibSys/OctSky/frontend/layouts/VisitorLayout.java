@@ -86,7 +86,7 @@ public class VisitorLayout extends AppLayout {
             String surname = (String) out.get("surname_out");
             name =  firstname + " " + surname;
         }
-        else if(getUserRole().equals("[ROLE_MEMBER]"))
+        else if(getUserRole().equals("[ROLE_MEMBER]") || getUserRole().equals("[ROLE_MEMBER_DISABLE_THEFT]") ||getUserRole().equals("[ROLE_MEMBER_DISABLE_LATE]") || getUserRole().equals("[ROLE_MEMBER_DISABLE_LOST]"))
         {
             Map<String, Object> out2 = staffService.searchUsersWithCard(getUserNumber());
             String firstname = (String) out2.get("firstname_out");
