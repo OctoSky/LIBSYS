@@ -15,11 +15,13 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.security.access.annotation.Secured;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Route(value = "user", layout = AdminLayout.class)
+
 @PageTitle("Användare")
 @CssImport("./views/about/about-view.css")
 public class AddUserView extends VerticalLayout {

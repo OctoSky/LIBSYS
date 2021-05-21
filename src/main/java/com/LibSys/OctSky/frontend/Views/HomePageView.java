@@ -17,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,6 +31,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 @Route(value = "", layout = VisitorLayout.class)
+@PageTitle("October Sky")
+
 public class HomePageView extends VerticalLayout {
 
 private BookService bookService;

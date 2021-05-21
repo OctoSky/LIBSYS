@@ -8,6 +8,7 @@ import com.LibSys.OctSky.frontend.Views.ArchivedBooksView;
 import com.LibSys.OctSky.frontend.Views.ManageBookView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -44,8 +45,12 @@ public class VisitorLayout extends AppLayout {
 
     private Component createHeaderContent() {
         Avatar avatar = new Avatar();
-        Anchor logout = new Anchor("logout", "Logga ut");
-        Anchor login = new Anchor("login", "Logga in");
+        Anchor logout = new Anchor("logout", " Logga ut");
+        Anchor login = new Anchor("login", " Logga in");
+        Anchor adminpanel = new Anchor("user", "Adminpanel |");
+        adminpanel.setWidth("120px");
+        Anchor librarianpanel = new Anchor("visitor","Adminpanel |");
+        librarianpanel.setWidth("120px");
         VerticalLayout fillLayout = new VerticalLayout();
         fillLayout.setWidth("160px");
         login.setWidth("80px");
@@ -63,6 +68,14 @@ public class VisitorLayout extends AppLayout {
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         layout.add(fillLayout);
         layout.add(verticalLayout);
+       if(getUserRole().equals("[ROLE_ADMIN]"))
+       {
+           layout.add(adminpanel);
+       }
+       if(getUserRole().equals("[ROLE_LIBRARIAN]"))
+       {
+           layout.add(librarianpanel);
+       }
         if(isUserLoggedIn())
         {
             layout.add(logout);

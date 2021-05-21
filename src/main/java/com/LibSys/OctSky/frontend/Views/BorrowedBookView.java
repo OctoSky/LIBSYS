@@ -11,9 +11,12 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 @Route(value = "borrow", layout = AdminLayout.class)
+@PageTitle("Lånade böcker")
+
 public class BorrowedBookView extends VerticalLayout {
 
     public BookService bookService;
