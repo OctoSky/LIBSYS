@@ -193,12 +193,17 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
 
     public Button createBorrowButton(VisitorBook item)
     {
+        String today = LocalDate.now(ZoneId.of("GMT+2")).toString();
+        String monthForward = LocalDate.parse(today).plusMonths(1).toString();
+        Label textlabel = new Label("Lånad fram till");
+        Label titleLabel = new Label(item.getTitle());
+        Label monthForwardlabel = new Label(monthForward);
+        Label textLabel2 = new Label(item.getTitle() + " lånad fram till \n" + monthForward);
+        VerticalLayout labelLayout = new VerticalLayout(titleLabel, textlabel, monthForwardlabel);
+        labelLayout.setAlignItems(Alignment.CENTER);
         VerticalLayout verticalLayout = new VerticalLayout();
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         HorizontalLayout fillerLayout = new HorizontalLayout();
-        String today = LocalDate.now(ZoneId.of("GMT+2")).toString();
-        String monthForward = LocalDate.parse(today).plusMonths(1).toString();
-        Label textLabel = new Label(item.getTitle() + " lånad fram till " + monthForward);
         Button closeButton = new Button("Ok");
         Notification notify = new Notification(verticalLayout);
         closeButton.addClickListener(click -> notify.close());
@@ -206,9 +211,11 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
 
         Button borrowButton = new Button("Låna", clickEvent -> {
             bookService.borrowBook(item.getId(), currentUserCardNo, today, monthForward);
-            fillerLayout.setWidth("75px");
-            horizontalLayout.add(fillerLayout,closeButton);
-            verticalLayout.add(textLabel,horizontalLayout);
+            fillerLayout.setWidth("50px");
+            horizontalLayout.add(fillerLayout, closeButton);
+            horizontalLayout.setAlignItems(Alignment.CENTER);
+            horizontalLayout.setVerticalComponentAlignment(Alignment.CENTER, closeButton);
+            verticalLayout.add(labelLayout,horizontalLayout);
             notify.setPosition(Notification.Position.MIDDLE);
             notify.open();
             populateGrid();
