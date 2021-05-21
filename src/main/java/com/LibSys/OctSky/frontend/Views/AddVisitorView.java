@@ -19,6 +19,7 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -85,22 +86,28 @@ public class AddVisitorView extends VerticalLayout {
 
     public Button createDisableButton(Visitor item)
     {
+        Div div = new Div();
+        div.setWidth("50px");
+        RadioButtonGroup<Reason> single = new RadioButtonGroup<>();
         Button returnButton = new Button();
         Reason reasonTheft = new Reason(4, "Stöld");
         Reason reasonLate = new Reason(5, "Försenade Böcker");
         Reason reasonLost = new Reason(6, "Förvunna Böcker");
         ArrayList<Reason> arrayList = new ArrayList<>();
         arrayList.add(reasonLate);
-        arrayList.add(reasonTheft);
         arrayList.add(reasonLost);
+        arrayList.add(reasonTheft);
+        single.setItems(arrayList);
         Notification notification = new Notification();
-        Label label = new Label("Välj en anledning");
+        Label label = new Label("Välj en anledning för spärrningen");
         ComboBox<Reason> reasonComboBox = new ComboBox<>();
         VerticalLayout verticalLayout = new VerticalLayout();
         HorizontalLayout buttonlayout = new HorizontalLayout();
-        Button confirmbutton = new Button("Ok");
+        HorizontalLayout fillerLayout = new HorizontalLayout();
+        Button confirmbutton = new Button("Okej");
         confirmbutton.addClickListener(e-> {
-                    visitorService.disableCard(item.getCardnumber(), reasonComboBox.getValue().getId());
+                    visitorService.disableCard(item.getCardnumber(), single.getValue().getId());
+                    notification.close();
                     populateGrid();
                 });
         Button cancelButton = new Button("Avbryt");
@@ -109,18 +116,18 @@ public class AddVisitorView extends VerticalLayout {
         if(item.getRoleId() == 3) {
             returnButton = new Button("Spärra", clickEvent ->
             {
-                reasonComboBox.setItemLabelGenerator(Reason::getReason);
-                reasonComboBox.setItems(arrayList);
-                reasonComboBox.setAutofocus(true);
-                notification.add(verticalLayout);
-                verticalLayout.add(label, reasonComboBox, buttonlayout);
+                fillerLayout.add(div, single);
                 buttonlayout.add(confirmbutton, cancelButton);
+                verticalLayout.add(label, fillerLayout, buttonlayout);
+                verticalLayout.setAlignItems(Alignment.CENTER);
+                notification.add(verticalLayout);
                 notification.setPosition(Notification.Position.MIDDLE);
                 notification.open();
             });
         }
         else
         {
+            returnButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
             returnButton = new Button("Ta bort spärr", clickEvent ->
             {
                 visitorService.disableCard(item.getCardnumber(), 3);

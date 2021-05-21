@@ -49,7 +49,7 @@ public class AddUserForm extends FormLayout {
     public AddUserForm(StaffService staffService, AddUserView addUserView) {
         this.staffService = staffService;
         this.addUserView = addUserView;
-        phone.setMaxLength(10);
+        phone.setMaxLength(9);
 
         configureBinder();
         configureComboBox();
@@ -143,16 +143,19 @@ public class AddUserForm extends FormLayout {
     }
 
     public void configureBinder() {
-        staffBinder.forField(firstname).withValidator( firstname -> firstname.length() >= 2, "Förnamn måste vara minst två tecken").bind(Staff::getfirstname,Staff::setfirstname);
-        staffBinder.forField(surname).withValidator(surname -> surname.length() >= 2,"Efternamn måste vara minst två tecken").bind(Staff::getsurname,Staff::setsurname);
-        staffBinder.forField(phone).withValidator( new RegexpValidator("Bara siffror","\\d*")).withValidator(phone -> phone.length() == 10 ,"Telefonnummer ska vara tio siffror långt").bind(Staff::getphone,Staff::setphone);
-        staffBinder.forField(email).withValidator(new EmailValidator("Det här är inte en giltig E-post address")).bind(Staff::getemail,Staff::setemail);
-
-
-        addUserObjectBinder.forField(rolesComboBox).asRequired("Måste ha en befattning").bind(AddUserObject::getRole, AddUserObject::setRole);
-        //staffBinder.forField(passwordField).bind(Credentials::getPassword,Credentials::setPassword); //FIXME behöver ett sätt att göra detta säkert
-        staffBinder.setBean(staffObject);
-        addUserObjectBinder.setBean(userObject);
+        this.staffBinder.forField(this.firstname).withValidator((firstname) -> {
+            return firstname.length() >= 2;
+        }, "Förnamn måste vara minst två tecken").bind(Staff::getfirstname, Staff::setfirstname);
+        this.staffBinder.forField(this.surname).withValidator((surname) -> {
+            return surname.length() >= 2;
+        }, "Efternamn måste vara minst två tecken").bind(Staff::getsurname, Staff::setsurname);
+        this.staffBinder.forField(this.phone).withValidator(new RegexpValidator("Bara siffror", "\\d*")).withValidator((phone) -> {
+            return phone.length() == 10;
+        }, "Telefonnummer ska vara tio siffror långt").bind(Staff::getphone, Staff::setphone);
+        this.staffBinder.forField(this.email).withValidator(new EmailValidator("Det här är inte en giltig E-post address")).bind(Staff::getemail, Staff::setemail);
+        this.addUserObjectBinder.forField(this.rolesComboBox).asRequired("Måste ha en befattning").bind(AddUserObject::getRole, AddUserObject::setRole);
+        this.staffBinder.setBean(this.staffObject);
+        this.addUserObjectBinder.setBean(this.userObject);
     }
 
     public void configureComboBox()

@@ -17,7 +17,11 @@ public class Reason {
     public void setId(int id) {
         this.id = id;
     }
-
+    @Override
+    public String toString()
+    {
+        return reason;
+    }
     public String getReason() {
         return reason;
     }
