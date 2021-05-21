@@ -11,6 +11,8 @@ import $css_0 from 'Frontend/views/about/about-view.css';
 addCssBlock(`<custom-style><style>${$css_0}</style></custom-style>`);
 import $css_1 from 'Frontend/views/main/main-view.css';
 addCssBlock(`<custom-style><style>${$css_1}</style></custom-style>`);
+import $css_2 from 'Frontend/views/grid-cell.css';
+addCssBlock(`<dom-module id="flow_css_mod_2" theme-for="vaadin-grid"><template><style>${$css_2}</style></template></dom-module>`);
 
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-list/iron-list.js';

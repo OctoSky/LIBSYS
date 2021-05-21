@@ -22,6 +22,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,7 @@ import java.util.List;
 @Route(value = "visitor", layout = AdminLayout.class)
 @PageTitle("Besökare")
 @CssImport("./views/about/about-view.css")
+@CssImport(value="./views/grid-cell.css", themeFor="vaadin-grid")
 public class AddVisitorView extends VerticalLayout {
 
     Button addButton = new Button("Lägg till");
@@ -63,7 +66,7 @@ public class AddVisitorView extends VerticalLayout {
 
     public void configureGrid(){
 
-        grid.setColumns("visitorNumber","cardnumber","socialsecuritynumber","firstname","surname","email","phone","address");
+        grid.setColumns("roleId","visitorNumber","cardnumber","socialsecuritynumber","firstname","surname","email","phone","address");
         grid.getColumnByKey("cardnumber").setHeader("Kortnummer");
         grid.getColumnByKey("socialsecuritynumber").setHeader("Personnummer");
         grid.getColumnByKey("firstname").setHeader("Förnamn");
@@ -71,6 +74,7 @@ public class AddVisitorView extends VerticalLayout {
         grid.getColumnByKey("email").setHeader("E-postadress");
         grid.getColumnByKey("phone").setHeader("Telefonnr");
         grid.getColumnByKey("address").setHeader("Adress");
+        grid.removeColumnByKey("roleId");
         grid.asSingleSelect().addValueChangeListener(event -> selectionHandler());
         grid.removeColumnByKey("visitorNumber");
         grid.addComponentColumn(item -> createDisableButton(item)).setKey("disable");
@@ -81,6 +85,7 @@ public class AddVisitorView extends VerticalLayout {
 
     public Button createDisableButton(Visitor item)
     {
+        Button returnButton = new Button();
         Reason reasonTheft = new Reason(4, "Stöld");
         Reason reasonLate = new Reason(5, "Försenade Böcker");
         Reason reasonLost = new Reason(6, "Förvunna Böcker");
@@ -90,26 +95,39 @@ public class AddVisitorView extends VerticalLayout {
         arrayList.add(reasonLost);
         Notification notification = new Notification();
         Label label = new Label("Välj en anledning");
-        ComboBox<Reason> reasonComboBox = new ComboBox<Reason>();
+        ComboBox<Reason> reasonComboBox = new ComboBox<>();
         VerticalLayout verticalLayout = new VerticalLayout();
         HorizontalLayout buttonlayout = new HorizontalLayout();
         Button confirmbutton = new Button("Ok");
-        confirmbutton.addClickListener(e->visitorService.disableCard(item.getCardnumber(), reasonComboBox.getValue().getId()));
+        confirmbutton.addClickListener(e-> {
+                    visitorService.disableCard(item.getCardnumber(), reasonComboBox.getValue().getId());
+                    populateGrid();
+                });
         Button cancelButton = new Button("Avbryt");
         cancelButton.addClickListener(e->notification.close());
-        Button button = new Button("Spärra", clickEvent -> {
-            reasonComboBox.setItemLabelGenerator(Reason::getReason);
-            reasonComboBox.setItems(arrayList);
-            reasonComboBox.setAutofocus(true);
-            notification.add(verticalLayout);
-            verticalLayout.add(label, reasonComboBox, buttonlayout);
-            buttonlayout.add(confirmbutton, cancelButton);
-            notification.setPosition(Notification.Position.MIDDLE);
-            notification.open();
 
-        });
-
-        return button;
+        if(item.getRoleId() == 3) {
+            returnButton = new Button("Spärra", clickEvent ->
+            {
+                reasonComboBox.setItemLabelGenerator(Reason::getReason);
+                reasonComboBox.setItems(arrayList);
+                reasonComboBox.setAutofocus(true);
+                notification.add(verticalLayout);
+                verticalLayout.add(label, reasonComboBox, buttonlayout);
+                buttonlayout.add(confirmbutton, cancelButton);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            });
+        }
+        else
+        {
+            returnButton = new Button("Ta bort spärr", clickEvent ->
+            {
+                visitorService.disableCard(item.getCardnumber(), 3);
+                populateGrid();
+            });
+        }
+        return returnButton;
     }
 
     public Visitor getSelection()
