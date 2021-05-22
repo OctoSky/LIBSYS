@@ -1,10 +1,7 @@
 package com.LibSys.OctSky.frontend.Views;
 
 import com.LibSys.OctSky.backend.Service.BookService;
-import com.LibSys.OctSky.backend.model.Availability;
-import com.LibSys.OctSky.backend.model.Book;
-import com.LibSys.OctSky.backend.model.Ebook;
-import com.LibSys.OctSky.backend.model.VisitorBook;
+import com.LibSys.OctSky.backend.model.*;
 import com.LibSys.OctSky.frontend.layouts.AdminLayout;
 import com.LibSys.OctSky.frontend.layouts.VisitorLayout;
 import com.vaadin.flow.component.button.Button;
@@ -20,6 +17,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -167,6 +165,12 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
             grid.addComponentColumn(item -> createBorrowButton(item)).setKey("borrow");
             grid.getColumnByKey("borrow").setHeader("");
         }
+        else if(isUserLoggedIn() && getUserRole().equals("[ROLE_MEMBER_DISABLE_THEFT]") || getUserRole().equals("[ROLE_MEMBER_DISABLE_LOST]") || getUserRole().equals("[ROLE_MEMBER_DISABLE_LATE]"))
+        {
+            grid.addComponentColumn(item -> createDisabledButton(item)).setKey("disabled");
+            grid.getColumnByKey("disabled").setHeader("");
+        }
+
 
         grid.getColumnByKey("beskrivning").setHeader("Beskrivning");
         grid.getColumnByKey("title").setAutoWidth(true);
@@ -191,8 +195,54 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
         return button;
     }
 
+    public Button createDisabledButton(VisitorBook item)
+    {
+        Label reason = new Label();
+        switch (getUserRole()) {
+            case ("[ROLE_MEMBER_DISABLE_THEFT]"):
+                reason.setText("stöld");
+                break;
+            case("[ROLE_MEMBER_DISABLE_LATE]"):
+                reason.setText("försenade böcker");
+                break;
+            case("[ROLE_MEMBER_DISABLE_LOST]"):
+                reason.setText("försvunna böcker");
+                break;
+        }
+        Button button = new Button("Kort Spärrat", clickEvent -> {
+            Div taskNotification = new Div();
+            Notification notification = new Notification(taskNotification);
+            taskNotification.addClickListener(listener ->
+                    notification.close());
+            Label label = new Label("Ditt kort har blivit spärrat på grund av " + reason.getText() + ", vänligen kontakta personalen för mer info!");
+            notification.setPosition(Notification.Position.MIDDLE);
+            taskNotification.add(label);
+            notification.add(taskNotification);
+            notification.setVisible(true);
+            notification.open();
+        });
+
+        return button;
+    }
+    public boolean checkIfBorrowed(int bookid, int cardnumber)
+    {
+        boolean exists = false;
+        List<BorrowedBook> borrowedBooks = bookService.findBorrowedBooks();
+        for(BorrowedBook borrowedBook : borrowedBooks)
+        {
+            if(borrowedBook.getId() == bookid && borrowedBook.getCardnumber() == cardnumber)
+            {
+                exists = true;
+            }
+        }
+        //This function should return true or false depending on if the user has already borrowed
+        //this particular book
+        return  exists;
+    }
+
     public Button createBorrowButton(VisitorBook item)
     {
+        boolean havebook = checkIfBorrowed(item.getId(), getUserNumber());
         String today = LocalDate.now(ZoneId.of("GMT+2")).toString();
         String monthForward = LocalDate.parse(today).plusMonths(1).toString();
 
@@ -210,24 +260,40 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
         VerticalLayout horizontalLayout = new VerticalLayout();
         HorizontalLayout fillerLayout = new HorizontalLayout();
 
-
+        Button borrowButton = new Button();
         Button closeButton = new Button("Okej");
 
         Notification notify = new Notification(verticalLayout);
         closeButton.addClickListener(click -> notify.close());
         int currentUserCardNo = getUserNumber();
-
-        Button borrowButton = new Button("Låna", clickEvent -> {
-            bookService.borrowBook(item.getId(), currentUserCardNo, today, monthForward);
-            fillerLayout.setWidth("50px");
-            horizontalLayout.add(closeButton);
-            horizontalLayout.setAlignItems(Alignment.CENTER);
-            horizontalLayout.setHeight("50px");
-            verticalLayout.add(labelLayout,horizontalLayout);
-            notify.setPosition(Notification.Position.MIDDLE);
-            notify.open();
-            populateGrid();
-        });
+        if(!havebook) {
+            borrowButton = new Button("Låna", clickEvent -> {
+                bookService.borrowBook(item.getId(), currentUserCardNo, today, monthForward);
+                fillerLayout.setWidth("50px");
+                horizontalLayout.add(closeButton);
+                horizontalLayout.setAlignItems(Alignment.CENTER);
+                horizontalLayout.setHeight("50px");
+                verticalLayout.add(labelLayout, horizontalLayout);
+                notify.setPosition(Notification.Position.MIDDLE);
+                notify.open();
+                populateGrid();
+            });
+        }
+        else
+        {
+            borrowButton = new Button("Låna", clickEvent -> {
+                Div taskNotification = new Div();
+                Notification notification = new Notification(taskNotification);
+                taskNotification.addClickListener(listener ->
+                        notification.close());
+                Label label = new Label("Du har redan lånat en kopia av den här boken!");
+                notification.setPosition(Notification.Position.MIDDLE);
+                taskNotification.add(label);
+                notification.add(taskNotification);
+                notification.setVisible(true);
+                notification.open();
+            });
+        }
         if(item.getAmount().equals("Nej"))
         {
             borrowButton.addThemeVariants(ButtonVariant.LUMO_ERROR);

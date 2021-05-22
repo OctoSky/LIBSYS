@@ -54,7 +54,7 @@ public class VisitorLayout extends AppLayout {
         VerticalLayout fillLayout = new VerticalLayout();
         fillLayout.setWidth("160px");
         login.setWidth("80px");
-        logout.setWidth("80px");
+        logout.setWidth("100px");
         H2 h1 = new H2("October Sky's Bibliotek");
         HorizontalLayout layout = new HorizontalLayout();
         VerticalLayout verticalLayout = new VerticalLayout();
