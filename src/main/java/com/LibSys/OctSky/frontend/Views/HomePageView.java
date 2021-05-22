@@ -195,16 +195,24 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
     {
         String today = LocalDate.now(ZoneId.of("GMT+2")).toString();
         String monthForward = LocalDate.parse(today).plusMonths(1).toString();
-        Label textlabel = new Label("Lånad fram till");
+
+        Label textlabel = new Label("lånad fram till");
         Label titleLabel = new Label(item.getTitle());
         Label monthForwardlabel = new Label(monthForward);
-        Label textLabel2 = new Label(item.getTitle() + " lånad fram till \n" + monthForward);
+        textlabel.setHeight("2px");
+        titleLabel.setHeight("2px");
+        monthForwardlabel.setHeight("10px");
+
         VerticalLayout labelLayout = new VerticalLayout(titleLabel, textlabel, monthForwardlabel);
         labelLayout.setAlignItems(Alignment.CENTER);
+        labelLayout.setHeight("50px");
         VerticalLayout verticalLayout = new VerticalLayout();
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        VerticalLayout horizontalLayout = new VerticalLayout();
         HorizontalLayout fillerLayout = new HorizontalLayout();
-        Button closeButton = new Button("Ok");
+
+
+        Button closeButton = new Button("Okej");
+
         Notification notify = new Notification(verticalLayout);
         closeButton.addClickListener(click -> notify.close());
         int currentUserCardNo = getUserNumber();
@@ -212,9 +220,9 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
         Button borrowButton = new Button("Låna", clickEvent -> {
             bookService.borrowBook(item.getId(), currentUserCardNo, today, monthForward);
             fillerLayout.setWidth("50px");
-            horizontalLayout.add(fillerLayout, closeButton);
+            horizontalLayout.add(closeButton);
             horizontalLayout.setAlignItems(Alignment.CENTER);
-            horizontalLayout.setVerticalComponentAlignment(Alignment.CENTER, closeButton);
+            horizontalLayout.setHeight("50px");
             verticalLayout.add(labelLayout,horizontalLayout);
             notify.setPosition(Notification.Position.MIDDLE);
             notify.open();
