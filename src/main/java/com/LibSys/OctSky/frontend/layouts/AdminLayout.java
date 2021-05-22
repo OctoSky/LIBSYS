@@ -105,7 +105,7 @@ public class AdminLayout extends AppLayout {
     private Component[] createAdminItems() {
         return new Tab[]
                 {
-                        createTab("Hantera Användare", AddUserView.class),
+                        createTab("Hantera Personal", AddUserView.class),
                         createTab("Hantera Besökare", AddVisitorView.class),
                         createTab("Hantera Böcker", ManageBookView.class),
                         createTab("Arkiverade Böcker", ArchivedBooksView.class),

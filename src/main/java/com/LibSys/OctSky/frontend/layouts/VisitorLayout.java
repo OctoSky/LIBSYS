@@ -48,11 +48,11 @@ public class VisitorLayout extends AppLayout {
         Anchor logout = new Anchor("logout", " Logga ut");
         Anchor login = new Anchor("login", " Logga in");
         Anchor adminpanel = new Anchor("user", "Adminpanel |");
-        adminpanel.setWidth("120px");
+        adminpanel.setWidth("130px");
         Anchor librarianpanel = new Anchor("visitor","Adminpanel |");
         librarianpanel.setWidth("120px");
         VerticalLayout fillLayout = new VerticalLayout();
-        fillLayout.setWidth("160px");
+        fillLayout.setWidth("290px");
         login.setWidth("80px");
         logout.setWidth("100px");
         H2 h1 = new H2("October Sky's Bibliotek");

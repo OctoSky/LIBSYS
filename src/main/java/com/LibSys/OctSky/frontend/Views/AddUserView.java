@@ -22,7 +22,7 @@ import java.util.List;
 
 @Route(value = "user", layout = AdminLayout.class)
 
-@PageTitle("Användare")
+@PageTitle("Personal")
 @CssImport("./views/about/about-view.css")
 public class AddUserView extends VerticalLayout {
 
