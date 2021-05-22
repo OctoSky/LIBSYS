@@ -105,6 +105,7 @@ public class ManageBookForm extends FormLayout {
     }
     public void fillForm()
     {
+        String trimmedString = manageBookView.getSelection().getPrice();
         book = manageBookView.getSelection();
         bookBinder.setBean(book);
 
