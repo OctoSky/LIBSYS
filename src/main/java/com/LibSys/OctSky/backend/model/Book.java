@@ -1,7 +1,7 @@
 package com.LibSys.OctSky.backend.model;
 
 public class Book {
-     int id;
+    int id;
     String price;
     String title;
     String writer;
@@ -91,7 +91,7 @@ public class Book {
     }
 
     public String getPrice() {
-        return price;
+        return price + " kr";
     }
 
     public void setPrice(String price) {

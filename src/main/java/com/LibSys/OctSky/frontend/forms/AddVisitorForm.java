@@ -20,6 +20,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.data.validator.RegexpValidator;
 import com.vaadin.flow.data.validator.RegexpValidator;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -62,8 +63,6 @@ public class AddVisitorForm extends FormLayout {
         configureButtons();
         configureFields();
 
-        add(socialSecurityNumber_Field,firstName_Field,surName_Field,email_Field, phone_Field, address_Field, buttonLayout);
-
     }
 
     public void closeNotification()
@@ -88,6 +87,7 @@ public class AddVisitorForm extends FormLayout {
     }
     public void addVisitor()
     {
+        int randomCardNumber = Integer.parseInt(RandomStringUtils.randomNumeric(5));
         boolean duplicateSSN = false;
         visitorList = visitorService.findVisitor();
         for(Visitor visitor: visitorList)
@@ -100,7 +100,7 @@ public class AddVisitorForm extends FormLayout {
         visitorList = visitorService.findVisitor();
         if(!duplicateSSN) {
             if (StringUtils.isNumeric(phone_Field.getValue()) && StringUtils.isNumeric(socialSecurityNumber_Field.getValue())) {
-                visitorService.addVisitor(socialSecurityNumber_Field.getValue(),
+                visitorService.addVisitor(randomCardNumber,socialSecurityNumber_Field.getValue(),
                         firstName_Field.getValue(),
                         surName_Field.getValue(),
                         email_Field.getValue(),
@@ -138,6 +138,7 @@ public class AddVisitorForm extends FormLayout {
         {
             clearForm();
             buttonLayout = buttonsAdding();
+            add(socialSecurityNumber_Field,firstName_Field,surName_Field,email_Field, phone_Field, address_Field, passwordField, buttonLayout);
         }
         else if(formState == FormState.Editing)
         {
@@ -149,7 +150,6 @@ public class AddVisitorForm extends FormLayout {
         {
             this.setVisible(false);
         }
-        add(socialSecurityNumber_Field,firstName_Field,surName_Field,email_Field, phone_Field, address_Field, buttonLayout);
     }
 
     public HorizontalLayout buttonsAdding()
@@ -214,7 +214,7 @@ public class AddVisitorForm extends FormLayout {
     {
         email_Field.setClearButtonVisible(true);
         email_Field.setErrorMessage("Vänligen fyll i en giltig E-postadress");
-        phone_Field.setMaxLength(11);
+        phone_Field.setMaxLength(10);
         socialSecurityNumber_Field.setMaxLength(12);
     }
 }
