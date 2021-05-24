@@ -70,7 +70,16 @@ public class BookService {
         String sql = "CALL borrowbook(?,?,?,?)";
         jdbcTemplate.update(sql, bookId, cardNumber, dateToday, returnDate);
     }
-
+    public void addCategory(String catName)
+    {
+        String sql = " INSERT INTO category(name) VALUES(?)";
+        jdbcTemplate.update(sql, catName);
+    }
+    public void addPublisher(String name)
+    {
+        String sql = " INSERT INTO publisher(name) VALUES(?)";
+        jdbcTemplate.update(sql, name);
+    }
     public List findBorrowedBooks()
     {
         String sql = "SELECT * FROM borrowedbooksview";

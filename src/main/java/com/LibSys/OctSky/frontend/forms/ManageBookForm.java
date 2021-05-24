@@ -53,6 +53,16 @@ public class ManageBookForm extends FormLayout {
     {
         this.manageBookView = manageBookView;
         this.bookService = bookService;
+        categoryComboBox.setAllowCustomValue(true);
+        categoryComboBox.addCustomValueSetListener(e-> {
+                bookService.addCategory(e.getDetail());
+                categoryComboBox.setItems(bookService.findCategories());
+                });
+        publisherComboBox.setAllowCustomValue(true);
+        publisherComboBox.addCustomValueSetListener(e-> {
+            bookService.addPublisher(e.getDetail());
+            publisherComboBox.setItems(bookService.findPublishers());
+        });
         configureComboBoxes();
         configureBinder();
         configureButtons();
