@@ -91,7 +91,7 @@ public class Book {
     }
 
     public String getPrice() {
-        return price + " kr";
+        return price;
     }
 
     public void setPrice(String price) {
