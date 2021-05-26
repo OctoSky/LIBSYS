@@ -32,7 +32,7 @@ public class ArchivedBooksView extends VerticalLayout {
 
     public void configureGrid()
     {
-        grid.setColumns("id","title", "writer", "description", "price", "isbn", "dewey", "category", "publisher","categoryId","publisherId", "reason");
+        grid.setColumns("id","title", "writer", "description", "price", "isbn", "dewey", "category", "publisher","categoryId","publisherId", "reason","booknumber");
         grid.getColumnByKey("title").setHeader("Titel");
         grid.getColumnByKey("writer").setHeader("Författare");
         grid.getColumnByKey("price").setHeader("Pris");
@@ -40,6 +40,7 @@ public class ArchivedBooksView extends VerticalLayout {
         grid.getColumnByKey("dewey").setHeader("Dewey");
         grid.getColumnByKey("category").setHeader("Kategori");
         grid.getColumnByKey("publisher").setHeader("Förlag");
+        grid.getColumnByKey("booknumber").setHeader("Exemplarnummer");
         grid.removeColumnByKey("id");
         grid.removeColumnByKey("description");
         grid.removeColumnByKey("categoryId");

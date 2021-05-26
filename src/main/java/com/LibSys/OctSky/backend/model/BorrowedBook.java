@@ -9,8 +9,9 @@ public class BorrowedBook {
     String firstname;
     String surname;
     String email;
+    int booknumber;
 
-    public BorrowedBook(int id, String title, String borrowdate, String returndate, int cardnumber, String firstname, String surname, String email)
+    public BorrowedBook(int id, String title, String borrowdate, String returndate, int cardnumber, String firstname, String surname, String email,int booknumber)
     {
         this.id = id;
         this.title = title;
@@ -20,6 +21,16 @@ public class BorrowedBook {
         this.firstname = firstname;
         this.surname = surname;
         this.email = email;
+        this.booknumber = booknumber;
+
+    }
+
+    public int getBooknumber() {
+        return booknumber;
+    }
+
+    public void setBooknumber(int booknumber) {
+        this.booknumber = booknumber;
     }
 
     public int getId() {

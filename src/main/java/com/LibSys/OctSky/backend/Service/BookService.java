@@ -94,7 +94,8 @@ public class BookService {
                     rs.getInt("cardNumber"),
                     rs.getString("firstname"),
                     rs.getString("surname"),
-                    rs.getString("email")));
+                    rs.getString("email"),
+                    rs.getInt("booknumber")));
         }
         catch (Exception e)
         {
@@ -118,7 +119,8 @@ public class BookService {
                     rs.getString("publisher"),
                     rs.getInt("categoryid"),
                     rs.getInt("publisherid"),
-                    rs.getString("reason")));
+                    rs.getString("reason"),
+                    rs.getInt("booknumber")));
         }
         catch(Exception e)
         {

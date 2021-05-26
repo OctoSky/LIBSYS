@@ -13,6 +13,7 @@ public class ArchivedBooks {
     int categoryId;
     int publisherId;
     String reason;
+    int booknumber;
     public ArchivedBooks(int id,
                          String price,
                          String title,
@@ -24,7 +25,8 @@ public class ArchivedBooks {
                          String publisher,
                          int categoryId,
                          int publisherId,
-                         String reason)
+                         String reason,
+                         int booknumber)
     {
 
         this.id = id;
@@ -39,6 +41,15 @@ public class ArchivedBooks {
         this.categoryId = categoryId;
         this.publisherId = publisherId;
         this.reason = reason;
+        this.booknumber = booknumber;
+    }
+
+    public int getBooknumber() {
+        return booknumber;
+    }
+
+    public void setBooknumber(int booknumber) {
+        this.booknumber = booknumber;
     }
 
     public int getId() {

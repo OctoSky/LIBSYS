@@ -33,7 +33,7 @@ public class BorrowedBookView extends VerticalLayout {
     }
     public void configureGrid()
     {
-        grid.setColumns("title", "borrowdate", "returndate", "cardnumber", "firstname", "surname", "email");
+        grid.setColumns("title", "borrowdate", "returndate", "cardnumber", "firstname", "surname", "email","booknumber");
         grid.getColumnByKey("title").setHeader("Titel");
         grid.getColumnByKey("borrowdate").setHeader("Lånedatum");
         grid.getColumnByKey("returndate").setHeader("Returdatum");
@@ -41,6 +41,7 @@ public class BorrowedBookView extends VerticalLayout {
         grid.getColumnByKey("firstname").setHeader("Förnamn");
         grid.getColumnByKey("surname").setHeader("Efternamn");
         grid.getColumnByKey("email").setHeader("E-post");
+        grid.getColumnByKey("booknumber").setHeader("Exemplarnummer");
         grid.addComponentColumn(item -> createReturnButton(item)).setKey("return");
     }
     public void populateGrid()
