@@ -54,6 +54,7 @@ public class ManageBookView extends VerticalLayout {
     Button remove = new Button("Ta bort");
 
     protected SingleSelect<Grid<Book>,Book> selection = grid.asSingleSelect();
+    public int bookNumberId;
     protected HorizontalLayout buttonLayout = new HorizontalLayout();
 
     public ManageBookView(BookService bookService)
@@ -65,6 +66,7 @@ public class ManageBookView extends VerticalLayout {
         remove.setEnabled(false);
         configureFilter();
         configureButtons();
+        configureComboBox();
         populateGrid();
         configureGrid();
         add(buttonLayout, filterLayout, grid, manageBookForm);

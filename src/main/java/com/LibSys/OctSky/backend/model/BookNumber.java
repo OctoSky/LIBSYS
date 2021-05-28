@@ -1,5 +1,7 @@
 package com.LibSys.OctSky.backend.model;
 
+import javax.validation.OverridesAttribute;
+
 public class BookNumber {
     public enum Status{available, borrowed, archived}
     private int id;
