@@ -45,4 +45,17 @@ public class BookNumber {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public String getIdAsString (){
+     String string = String.valueOf(this.id);
+        return string;
+    }
+
+
+    @Override
+    public String toString() {
+        return "BookNumber{" +
+                "id=" + id +
+                '}';
+    }
 }

@@ -179,10 +179,10 @@ public class BookService {
         String sql = "CALL addnewbook(?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, title, writer, isbn, description, price, dewey, publisherid, categoryid, ebook, amount);
     }
-    public void deleteBook(int id, String reason)
+    public void deleteBook(int id,int bookNumberId ,String reason)
     {
-        String sql = "CALL deletebook(?,?)";
-        jdbcTemplate.update(sql,id, reason);
+        String sql = "CALL deletebook(?,?,?)";
+        jdbcTemplate.update(sql,id, bookNumberId, reason);
     }
 
     public List findPublishers()
@@ -211,4 +211,14 @@ public class BookService {
         }
     }
 
+    public List findAvailableBookNumbers (){
+        String sql = "SELECT * FROM availablebooknumberview";
+        try {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new BookNumber(rs.getInt("id"),rs.getInt("books_id"),rs.getString("status"),rs.getString("comment")));
+        }
+        catch (Exception e){
+            return new ArrayList();
+        }
+
+    }
 }

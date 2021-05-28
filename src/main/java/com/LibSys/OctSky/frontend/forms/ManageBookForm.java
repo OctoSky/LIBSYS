@@ -142,7 +142,7 @@ public class ManageBookForm extends FormLayout {
     }
 
     public void deleteBook(String reason){
-        bookService.deleteBook(manageBookView.getSelection().getId(), reason);
+        bookService.deleteBook(manageBookView.getSelection().getId(),manageBookView.bookNumberId ,reason);
         manageBookView.populateGrid();
     }
 

@@ -2,6 +2,7 @@ package com.LibSys.OctSky.frontend.Views;
 
 import com.LibSys.OctSky.backend.Service.BookService;
 import com.LibSys.OctSky.backend.model.Book;
+import com.LibSys.OctSky.backend.model.BookNumber;
 import com.LibSys.OctSky.backend.model.Staff;
 import com.LibSys.OctSky.backend.model.Visitor;
 import com.LibSys.OctSky.frontend.forms.FormState;
@@ -10,6 +11,7 @@ import com.LibSys.OctSky.frontend.layouts.AdminLayout;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
@@ -38,6 +40,8 @@ public class ManageBookView extends VerticalLayout {
     BookService bookService;
     ManageBookForm manageBookForm;
     Grid<Book> grid = new Grid<>(Book.class);
+
+    ComboBox<BookNumber> bookNumberBox = new ComboBox("Välj bokexemplar");
 
     TextField categoryFilter = new TextField();
     TextField titleFilter = new TextField();
@@ -192,6 +196,7 @@ public class ManageBookView extends VerticalLayout {
         Button cancelbutton = new Button("Avbryt");
         TextField reason = new TextField("");
         Label label = new Label("Skriv en anledning i textfältet");
+
         button.addClickListener(event ->
         {
             if(!reason.isEmpty()) {
@@ -206,7 +211,8 @@ public class ManageBookView extends VerticalLayout {
         cancelbutton.addClickListener(event -> notification.close());
         buttonLayout.add(button,cancelbutton);
         verticalLayout.setSizeFull();
-        verticalLayout.add(label, reason, buttonLayout);
+        verticalLayout.add(bookNumberBox ,label, reason, buttonLayout);
+        bookNumberBox.addValueChangeListener(valueChangeEvent -> {bookNumberId = bookNumberBox.getValue().getId();});
         notification.setPosition(Notification.Position.MIDDLE);
         notification.add(verticalLayout);
         notification.setVisible(true);
@@ -237,5 +243,10 @@ public class ManageBookView extends VerticalLayout {
         return selection.getValue();
     }
 
+    public void configureComboBox (){
+
+        bookNumberBox.setItems(bookService.findAvailableBookNumbers());
+
+    }
 
 }
