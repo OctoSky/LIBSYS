@@ -268,7 +268,7 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
         int currentUserCardNo = getUserNumber();
         if(!havebook) {
             borrowButton = new Button("Låna", clickEvent -> {
-                bookService.borrowBook(item.getId(), currentUserCardNo, today, monthForward);
+                bookService.borrowBook( currentUserCardNo, today, monthForward);
                 fillerLayout.setWidth("50px");
                 horizontalLayout.add(closeButton);
                 horizontalLayout.setAlignItems(Alignment.CENTER);

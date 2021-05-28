@@ -66,7 +66,17 @@ public class BookService {
         }
     }
 
-    public void borrowBook(int bookId, int cardNumber, String dateToday, String returnDate) {
+    public void borrowBook( int cardNumber, String dateToday, String returnDate) {
+        List<BookNumber> bookNumbers = findBookNumber();
+        int bookId = 0;
+        for (BookNumber bookNumber :bookNumbers) {
+            if (bookNumber.getStatus() == BookNumber.Status.available){
+                bookId = bookNumber.getId();
+                break;
+            }
+
+        }
+
         String sql = "CALL borrowbook(?,?,?,?)";
         jdbcTemplate.update(sql, bookId, cardNumber, dateToday, returnDate);
     }
@@ -181,6 +191,19 @@ public class BookService {
         try
         {
             return jdbcTemplate.query(sql, (rs, rowNum) -> new Publisher(rs.getInt("id"), rs.getString("name")));
+        }
+        catch(Exception e)
+        {
+            return new ArrayList();
+        }
+    }
+
+    public List findBookNumber(){
+
+        String sql = "SELECT * FROM booknumber";
+        try
+        {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new BookNumber(rs.getInt("id"),rs.getInt("books_id"),rs.getString("status"),rs.getString("comment")));
         }
         catch(Exception e)
         {
