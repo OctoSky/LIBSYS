@@ -160,10 +160,10 @@ public class BookService {
                          String dewey,
                          int publisherid,
                          int categoryid,
-                         String ebook, int amount)
+                         String ebook)
     {
-        String sql = "CALL updatebook(?,?,?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, bookId, title, writer, isbn, description, price, dewey, publisherid, categoryid, ebook, amount);
+        String sql = "CALL updatebook(?,?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, bookId, title, writer, isbn, description, price, dewey, publisherid, categoryid, ebook);
     }
 
     public void addnewbook(String title,

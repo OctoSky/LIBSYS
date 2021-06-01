@@ -92,17 +92,18 @@ public class ManageBookForm extends FormLayout {
         {
             clearForm();
             buttonLayout = buttonsAdding();
+            add(title, price, writer, isbn, description, dewey, amount, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
         }
         else if(formState == FormState.Editing)
         {
             fillForm();
             buttonLayout = buttonsEditing();
+            add(title, price, writer, isbn, description, dewey, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
         }
         else
         {
             this.setVisible(false);
         }
-        add(title, price, writer, isbn, description, dewey, amount, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
 
     }
     public HorizontalLayout buttonsAdding()
@@ -155,7 +156,7 @@ public class ManageBookForm extends FormLayout {
 
     public void saveBook()
     {
-        bookService.savebook(manageBookView.getSelection().getId(), title.getValue(), writer.getValue(), isbn.getValue(), description.getValue(), price.getValue(), dewey.getValue(), publisherComboBox.getValue().getId(), categoryComboBox.getValue().getId(), ebookComboBox.getValue().getOption(), amount.getValue());
+        bookService.savebook(manageBookView.getSelection().getId(), title.getValue(), writer.getValue(), isbn.getValue(), description.getValue(), price.getValue(), dewey.getValue(), publisherComboBox.getValue().getId(), categoryComboBox.getValue().getId(), ebookComboBox.getValue().getOption());
         manageBookView.populateGrid();
         this.setVisible(false);
     }

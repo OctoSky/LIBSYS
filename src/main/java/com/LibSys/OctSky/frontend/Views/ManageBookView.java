@@ -16,6 +16,7 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -26,7 +27,6 @@ import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 
 import javax.xml.validation.ValidatorHandler;
 import java.util.ArrayList;
@@ -40,6 +40,8 @@ public class ManageBookView extends VerticalLayout {
     BookService bookService;
     ManageBookForm manageBookForm;
     Grid<Book> grid = new Grid<>(Book.class);
+    Grid<BookNumber> gridBookCopies = new Grid<>(BookNumber.class);
+    protected SingleSelect<Grid<BookNumber>,BookNumber> selectionCopy = gridBookCopies.asSingleSelect();
 
     ComboBox<BookNumber> bookNumberBox = new ComboBox("Välj bokexemplar");
 
@@ -51,7 +53,10 @@ public class ManageBookView extends VerticalLayout {
     HorizontalLayout filterLayout = new HorizontalLayout(titleFilter, writerFilter, isbnFilter, categoryFilter);
 
     Button add = new Button("Lägg till");
-    Button remove = new Button("Ta bort");
+    Button removeCopy = new Button("Ta bort");
+    Button closeButton = new Button("Avbryt");
+
+    Notification copiesNotif = new Notification();
 
     protected SingleSelect<Grid<Book>,Book> selection = grid.asSingleSelect();
     public int bookNumberId;
@@ -63,15 +68,19 @@ public class ManageBookView extends VerticalLayout {
         manageBookForm = new ManageBookForm(bookService, this);
         manageBookForm.setVisible(false);
         this.setSizeFull();
-        remove.setEnabled(false);
         configureFilter();
         configureButtons();
         configureComboBox();
         populateGrid();
         configureGrid();
+        configureBookCopiesGrid();
         add(buttonLayout, filterLayout, grid, manageBookForm);
+        selectionCopy.setValue(null);
     }
-
+    public BookNumber getCopySelection()
+    {
+        return selectionCopy.getValue();
+    }
     public void configureFilter()
     {
         String[] filterStrings = new String[]{"titel", "författare", "isbn", "kategori"};
@@ -138,15 +147,14 @@ public class ManageBookView extends VerticalLayout {
     public void configureButtons()
     {
         add.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        remove.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
         add.addClickListener(Event-> formVisibility(true, FormState.Adding));
-        remove.addClickListener(Event -> deleteBook());
-        buttonLayout.add(add,remove);
+        buttonLayout.add(add);
     }
 
     public void configureGrid()
     {
+        gridBookCopies.getDataProvider().refreshAll();
         grid.setColumns("id","title", "writer", "description", "price", "isbn", "dewey", "category", "publisher","categoryId","publisherId", "ebook", "amount");
         grid.getColumnByKey("title").setHeader("Titel");
         grid.getColumnByKey("writer").setHeader("Författare");
@@ -163,13 +171,112 @@ public class ManageBookView extends VerticalLayout {
         grid.removeColumnByKey("publisherId");
         grid.addComponentColumn(item -> createDescriptionButton(item))
                         .setKey("beskrivning");
+        grid.addComponentColumn(item -> createCopiesButton(item)).setKey("Copies");
         grid.asSingleSelect().addValueChangeListener(event -> selectionHandler());
         grid.getColumnByKey("beskrivning").setHeader("Beskrivning");
         grid.getColumnByKey("title").setWidth("200px");
         grid.getColumnByKey("price").setWidth("30px");
     }
 
+    public void configureBookCopiesGrid()
+    {
+        gridBookCopies.getDataProvider().refreshAll();
+        selectionCopy.setValue(null);
+        gridBookCopies.setColumns("id","books_id", "status", "comment");
+        gridBookCopies.getColumnByKey("id").setHeader("ID");
+        gridBookCopies.removeColumnByKey("books_id");
+        gridBookCopies.removeColumnByKey("comment");
+        gridBookCopies.removeColumnByKey("status");
+    }
 
+    public void populateCopiesGrid(int bookid)
+    {
+        selectionCopy.setValue(null);
+        List<BookNumber> oldList = bookService.findBookNumber();
+        ArrayList<BookNumber> filteredList = new ArrayList<>();
+
+        for(BookNumber bookNumber: oldList)
+        {
+            if(bookNumber.getStatus() == BookNumber.Status.available && bookNumber.getBooks_id() == bookid)
+            {
+                filteredList.add(bookNumber);
+            }
+        }
+
+        gridBookCopies.setItems(filteredList);
+    }
+
+    public Button createCopiesButton(Book item)
+    {
+        selectionCopy.setValue(null);
+        Button button = new Button("Exemplar", clickEvent -> {
+            selectionCopy.setValue(null);
+            Button removeButton = new Button("Ta bort");
+            removeButton.setEnabled(false);
+            removeButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            selectionCopy.addValueChangeListener(event -> {
+               if(selectionCopy.isEmpty())
+               {
+                   removeButton.setEnabled(false);
+               }
+               else
+               {
+                   removeButton.setEnabled(true);
+               }
+            });
+            removeButton.addClickListener(event -> {
+                copiesNotif.close();
+                Notification notification = new Notification();
+                TextField reasonField = new TextField("Anledning");
+                Button confirmButton = new Button("Okej");
+                Button cancelButton = new Button("Avbryt");
+                confirmButton.addClickListener(event1 -> {
+                    bookService.deleteBook(getCopySelection().getBooks_id(), getCopySelection().getId(), reasonField.getValue());
+                    populateCopiesGrid(getCopySelection().getBooks_id());
+                    populateGrid();
+                    notification.close();
+                    selectionCopy.clear();
+                    selectionCopy.setValue(null);
+                    gridBookCopies.getDataProvider().refreshAll();
+                });
+                cancelButton.addClickListener(event2 -> {
+                    selectionCopy.clear();
+                    selectionCopy.setValue(null);
+                    notification.close();
+                    copiesNotif.open();
+                    gridBookCopies.getDataProvider().refreshAll();
+                });
+                HorizontalLayout horizontalLayout = new HorizontalLayout(confirmButton, cancelButton);
+                VerticalLayout verticalLayout = new VerticalLayout(reasonField, horizontalLayout);
+                notification.add(verticalLayout);
+                notification.setVisible(true);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            });
+            populateCopiesGrid(item.getId());
+            H1 h1 = new H1(item.getTitle());
+            copiesNotif.close();
+            copiesNotif.removeAll();
+            VerticalLayout verticalLayout = new VerticalLayout();
+            verticalLayout.setHeight("400px");
+            verticalLayout.setWidth("300px");
+            HorizontalLayout buttonLayout = new HorizontalLayout(removeButton, closeButton);
+            copiesNotif.setPosition(Notification.Position.MIDDLE);
+            closeButton.addClickListener(event -> copiesNotif.close());
+            verticalLayout.add(gridBookCopies, buttonLayout);
+            verticalLayout.setHorizontalComponentAlignment(Alignment.CENTER, h1);
+            verticalLayout.setHorizontalComponentAlignment(Alignment.CENTER, buttonLayout);
+            copiesNotif.add(verticalLayout);
+            copiesNotif.setVisible(true);
+            copiesNotif.open();
+        });
+            if(item.getAmount() < 1)
+            {
+                button.addThemeVariants(ButtonVariant.LUMO_ERROR);
+                button.setEnabled(false);
+            }
+        return button;
+    }
 
     public Button createDescriptionButton(Book item)
     {
@@ -231,12 +338,10 @@ public class ManageBookView extends VerticalLayout {
     {
         if(selection.isEmpty())
         {
-            remove.setEnabled(false);
             formVisibility(false, FormState.None);
         }
         else
         {
-            remove.setEnabled(true);
             formVisibility(true, FormState.Editing);
         }
     }
