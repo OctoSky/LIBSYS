@@ -237,7 +237,7 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
         }
         //This function should return true or false depending on if the user has already borrowed
         //this particular book
-        return  exists;
+        return exists;
     }
 
     public Button createBorrowButton(VisitorBook item)
@@ -268,7 +268,7 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
         int currentUserCardNo = getUserNumber();
         if(!havebook) {
             borrowButton = new Button("Låna", clickEvent -> {
-                bookService.borrowBook( currentUserCardNo, today, monthForward);
+                bookService.borrowBook( currentUserCardNo, today, monthForward, item.getId());
                 fillerLayout.setWidth("50px");
                 horizontalLayout.add(closeButton);
                 horizontalLayout.setAlignItems(Alignment.CENTER);

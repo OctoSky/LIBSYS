@@ -66,19 +66,19 @@ public class BookService {
         }
     }
 
-    public void borrowBook( int cardNumber, String dateToday, String returnDate) {
+    public void borrowBook( int cardNumber, String dateToday, String returnDate, int bookid) {
         List<BookNumber> bookNumbers = findBookNumber();
-        int bookId = 0;
+        int bookNr = 0;
         for (BookNumber bookNumber :bookNumbers) {
-            if (bookNumber.getStatus() == BookNumber.Status.available){
-                bookId = bookNumber.getId();
+            if (bookNumber.getStatus() == BookNumber.Status.available && bookNumber.getBooks_id() == bookid){
+                bookNr = bookNumber.getId();
                 break;
             }
 
         }
 
         String sql = "CALL borrowbook(?,?,?,?)";
-        jdbcTemplate.update(sql, bookId, cardNumber, dateToday, returnDate);
+        jdbcTemplate.update(sql, bookNr, cardNumber, dateToday, returnDate);
     }
     public void addCategory(String catName)
     {
