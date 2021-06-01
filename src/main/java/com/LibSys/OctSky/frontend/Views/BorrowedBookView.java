@@ -52,7 +52,7 @@ public class BorrowedBookView extends VerticalLayout {
     public Button createReturnButton(BorrowedBook item)
     {
         Button button = new Button("Återlämnad", clickEvent -> {
-        bookService.returnBook(item.getId(), item.getCardnumber());
+        bookService.returnBook(item.getBooknumber(), item.getCardnumber());
         populateGrid();
         });
 

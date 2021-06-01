@@ -38,11 +38,11 @@ public class BookService {
         }
     }
 
-    public void returnBook(int bookId, int librarycardnumber)
+    public void returnBook(int bookNumberId, int librarycardnumber)
     {
         String sql = "CALL returnbook(?,?)";
 
-        jdbcTemplate.update(sql, bookId, librarycardnumber);
+        jdbcTemplate.update(sql, bookNumberId, librarycardnumber);
     }
 
     public List findVisitorBooks() {
