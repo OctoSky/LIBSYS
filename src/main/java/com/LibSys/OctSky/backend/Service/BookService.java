@@ -221,4 +221,9 @@ public class BookService {
         }
 
     }
+
+    public void reEnableBook(int bookNumberId) {
+        String sql = "CALL make_book_available(?)";
+        jdbcTemplate.update(sql,bookNumberId);
+    }
 }

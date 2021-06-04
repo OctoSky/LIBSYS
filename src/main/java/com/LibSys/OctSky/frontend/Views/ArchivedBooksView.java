@@ -18,6 +18,7 @@ import com.vaadin.flow.router.Route;
 @PageTitle("Arkiverade Böcker")
 @CssImport("./views/about/about-view.css")
 public class ArchivedBooksView extends VerticalLayout {
+
     private Grid<ArchivedBooks> grid = new Grid<>(ArchivedBooks.class);
     private BookService bookService;
     public ArchivedBooksView(BookService bookService)
@@ -50,6 +51,9 @@ public class ArchivedBooksView extends VerticalLayout {
                 .setKey("anledning");
         grid.getColumnByKey("anledning").setHeader("Anledning");
 
+        grid.addComponentColumn(item -> createEnableButton(item)).setKey("enable");
+        grid.getColumnByKey("enable").setHeader("");
+
     }
     public Button createReasonButton(ArchivedBooks item)
     {
@@ -68,6 +72,17 @@ public class ArchivedBooksView extends VerticalLayout {
 
         return button;
     }
+
+    private Button createEnableButton(ArchivedBooks archivedBook) {
+
+        Button enableButton = new Button("Ej längre arkiverad", clickEvent -> {
+            bookService.reEnableBook(archivedBook.getBooknumber());
+            populateGrid();
+        });
+
+        return enableButton;
+    }
+
     public void populateGrid()
     {
         grid.setItems(bookService.findArchivedBooks());
