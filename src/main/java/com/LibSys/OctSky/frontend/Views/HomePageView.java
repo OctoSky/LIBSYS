@@ -302,6 +302,7 @@ private Grid<VisitorBook> grid = new Grid<>(VisitorBook.class);
 
         return borrowButton;
     }
+
     private void populateGrid() {
         grid.setItems(bookService.findVisitorBooks());
     }
