@@ -22,6 +22,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -240,8 +241,6 @@ public class ManageBookView extends VerticalLayout {
                     gridBookCopies.getDataProvider().refreshAll();
                 });
                 cancelButton.addClickListener(event2 -> {
-                    selectionCopy.clear();
-                    selectionCopy.setValue(null);
                     notification.close();
                     copiesNotif.open();
                     gridBookCopies.getDataProvider().refreshAll();
@@ -262,7 +261,11 @@ public class ManageBookView extends VerticalLayout {
             verticalLayout.setWidth("300px");
             HorizontalLayout buttonLayout = new HorizontalLayout(removeButton, closeButton);
             copiesNotif.setPosition(Notification.Position.MIDDLE);
-            closeButton.addClickListener(event -> copiesNotif.close());
+            closeButton.addClickListener(event -> {
+                copiesNotif.close();
+                selectionCopy.setValue(null);
+            });
+
             verticalLayout.add(gridBookCopies, buttonLayout);
             verticalLayout.setHorizontalComponentAlignment(Alignment.CENTER, h1);
             verticalLayout.setHorizontalComponentAlignment(Alignment.CENTER, buttonLayout);
