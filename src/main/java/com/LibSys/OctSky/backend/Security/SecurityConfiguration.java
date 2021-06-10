@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +16,13 @@ import javax.sql.DataSource;
 
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private static final String LOGIN_PROCESSING_URL = "/login";
+    private static final String LOGIN_SUCCESS_URL = "/";
+    private static final String LOGIN_FAILURE_URL = "/login?error";
+    private static final String LOGOUT_SUCCESS_URL = "/";
+
+
 
     @Autowired
     DataSource dataSource;
@@ -36,15 +44,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/visitor").hasRole("ADMIN")
-                .antMatchers("/archive").hasAnyRole("ADMIN", "MEMBER", "LIBRARIAN")
-                .antMatchers("/user").hasAnyRole("ADMIN", "LIBRARIAN")
+                .antMatchers("/user").hasRole("ADMIN")
+                .antMatchers("/archive").hasAnyRole("ADMIN", "LIBRARIAN")
+                .antMatchers("/visitor").hasAnyRole("ADMIN", "LIBRARIAN")
+                .antMatchers("/books").hasAnyRole("ADMIN", "LIBRARIAN")
+                .antMatchers("/archive").hasAnyRole("ADMIN", "LIBRARIAN")
+                .antMatchers("/borrow").hasAnyRole("ADMIN", "LIBRARIAN")
                 .antMatchers("/").permitAll()
                 .antMatchers("/vaadinServlet/UIDL/**").permitAll()
                 .antMatchers("/vaadinServlet/HEARTBEAT/**").permitAll()
                 .antMatchers("/vaadinServlet/**").permitAll()
                 .antMatchers("/error").permitAll()
-                .and().formLogin();
+                .and().formLogin()
+                .successForwardUrl(LOGIN_SUCCESS_URL)
+                .loginProcessingUrl(LOGIN_PROCESSING_URL)
+                .failureUrl(LOGIN_FAILURE_URL)
+                .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL);
         http.csrf().disable();
     }
 
@@ -52,4 +67,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public PasswordEncoder getPasswordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-}
+
+
+    }
+
+
+
+
+
+

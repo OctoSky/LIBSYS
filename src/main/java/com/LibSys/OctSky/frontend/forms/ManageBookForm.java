@@ -53,6 +53,16 @@ public class ManageBookForm extends FormLayout {
     {
         this.manageBookView = manageBookView;
         this.bookService = bookService;
+        categoryComboBox.setAllowCustomValue(true);
+        categoryComboBox.addCustomValueSetListener(e-> {
+                bookService.addCategory(e.getDetail());
+                categoryComboBox.setItems(bookService.findCategories());
+                });
+        publisherComboBox.setAllowCustomValue(true);
+        publisherComboBox.addCustomValueSetListener(e-> {
+            bookService.addPublisher(e.getDetail());
+            publisherComboBox.setItems(bookService.findPublishers());
+        });
         configureComboBoxes();
         configureBinder();
         configureButtons();
@@ -64,9 +74,9 @@ public class ManageBookForm extends FormLayout {
         bookBinder.forField(title).bind(Book::getTitle, Book::setTitle);
         bookBinder.forField(price).bind(Book::getPrice, Book::setPrice);
         bookBinder.forField(writer).bind(Book::getWriter, Book::setWriter);
-        bookBinder.forField(isbn).bind(Book::getIsbn, Book::setIsbn);
+        bookBinder.forField(isbn).withValidator(isbn -> isbn.length() >= 10 , "Isbn måste vara minst 10 siffror").bind(Book::getIsbn, Book::setIsbn);
         bookBinder.forField(description).bind(Book::getDescription, Book::setDescription);
-        bookBinder.forField(dewey).bind(Book::getDewey, Book::setDewey);
+        bookBinder.forField(dewey).withValidator(dewey -> dewey.length() <=5,"Siffrorn måste vara mellan 0-999,och kan innehålla decimaler").bind(Book::getDewey, Book::setDewey);
         bookBinder.forField(amount).bind(Book::getAmount, Book::setAmount);
         addBookObjectBinder.forField(categoryComboBox).bind(AddBookObject::getCategory,AddBookObject::setCategory);
         addBookObjectBinder.forField(publisherComboBox).bind(AddBookObject::getPublisher, AddBookObject::setPublisher);
@@ -82,17 +92,18 @@ public class ManageBookForm extends FormLayout {
         {
             clearForm();
             buttonLayout = buttonsAdding();
+            add(title, price, writer, isbn, description, dewey, amount, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
         }
         else if(formState == FormState.Editing)
         {
             fillForm();
             buttonLayout = buttonsEditing();
+            add(title, price, writer, isbn, description, dewey, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
         }
         else
         {
             this.setVisible(false);
         }
-        add(title, price, writer, isbn, description, dewey, amount, ebookComboBox, publisherComboBox, categoryComboBox, buttonLayout);
 
     }
     public HorizontalLayout buttonsAdding()
@@ -105,6 +116,7 @@ public class ManageBookForm extends FormLayout {
     }
     public void fillForm()
     {
+        String trimmedString = manageBookView.getSelection().getPrice();
         book = manageBookView.getSelection();
         bookBinder.setBean(book);
 
@@ -131,7 +143,7 @@ public class ManageBookForm extends FormLayout {
     }
 
     public void deleteBook(String reason){
-        bookService.deleteBook(manageBookView.getSelection().getId(), reason);
+        bookService.deleteBook(manageBookView.getSelection().getId(),manageBookView.bookNumberId ,reason);
         manageBookView.populateGrid();
     }
 
@@ -144,7 +156,7 @@ public class ManageBookForm extends FormLayout {
 
     public void saveBook()
     {
-        bookService.savebook(manageBookView.getSelection().getId(), title.getValue(), writer.getValue(), isbn.getValue(), description.getValue(), price.getValue(), dewey.getValue(), publisherComboBox.getValue().getId(), categoryComboBox.getValue().getId(), ebookComboBox.getValue().getOption(), amount.getValue());
+        bookService.savebook(manageBookView.getSelection().getId(), title.getValue(), writer.getValue(), isbn.getValue(), description.getValue(), price.getValue(), dewey.getValue(), publisherComboBox.getValue().getId(), categoryComboBox.getValue().getId(), ebookComboBox.getValue().getOption());
         manageBookView.populateGrid();
         this.setVisible(false);
     }

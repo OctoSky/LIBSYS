@@ -38,11 +38,19 @@ public class BookService {
         }
     }
 
+    public void returnBook(int bookNumberId, int librarycardnumber)
+    {
+        String sql = "CALL returnbook(?,?)";
+
+        jdbcTemplate.update(sql, bookNumberId, librarycardnumber);
+    }
+
     public List findVisitorBooks() {
 
         String sql = "SELECT * FROM visitorbookview";
         try {
             return jdbcTemplate.query(sql, (rs, rowNum) -> new VisitorBook(
+                    rs.getInt("id"),
                     rs.getString("title"),
                     rs.getString("writer"),
                     rs.getString("description"),
@@ -58,19 +66,46 @@ public class BookService {
         }
     }
 
+    public void borrowBook( int cardNumber, String dateToday, String returnDate, int bookid) {
+        List<BookNumber> bookNumbers = findBookNumber();
+        int bookNr = 0;
+        for (BookNumber bookNumber :bookNumbers) {
+            if (bookNumber.getStatus() == BookNumber.Status.available && bookNumber.getBooks_id() == bookid){
+                bookNr = bookNumber.getId();
+                break;
+            }
+
+        }
+
+        String sql = "CALL borrowbook(?,?,?,?)";
+        jdbcTemplate.update(sql, bookNr, cardNumber, dateToday, returnDate);
+    }
+    public void addCategory(String catName)
+    {
+        String sql = " INSERT INTO category(name) VALUES(?)";
+        jdbcTemplate.update(sql, catName);
+    }
+    public void addPublisher(String name)
+    {
+        String sql = " INSERT INTO publisher(name) VALUES(?)";
+        jdbcTemplate.update(sql, name);
+    }
     public List findBorrowedBooks()
     {
         String sql = "SELECT * FROM borrowedbooksview";
 
         try
         {
-            return jdbcTemplate.query(sql, (rs, rowNum) -> new BorrowedBook(rs.getString("title"),
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new BorrowedBook(
+                    rs.getInt("id"),
+                    rs.getString("title"),
                     rs.getString("borrowdate"),
                     rs.getString("returndate"),
                     rs.getInt("cardNumber"),
                     rs.getString("firstname"),
                     rs.getString("surname"),
-                    rs.getString("email")));
+                    rs.getString("email"),
+                    rs.getInt("booknumber")));
         }
         catch (Exception e)
         {
@@ -94,7 +129,8 @@ public class BookService {
                     rs.getString("publisher"),
                     rs.getInt("categoryid"),
                     rs.getInt("publisherid"),
-                    rs.getString("reason")));
+                    rs.getString("reason"),
+                    rs.getInt("booknumber")));
         }
         catch(Exception e)
         {
@@ -124,10 +160,10 @@ public class BookService {
                          String dewey,
                          int publisherid,
                          int categoryid,
-                         String ebook, int amount)
+                         String ebook)
     {
-        String sql = "CALL updatebook(?,?,?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, bookId, title, writer, isbn, description, price, dewey, publisherid, categoryid, ebook, amount);
+        String sql = "CALL updatebook(?,?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, bookId, title, writer, isbn, description, price, dewey, publisherid, categoryid, ebook);
     }
 
     public void addnewbook(String title,
@@ -143,10 +179,10 @@ public class BookService {
         String sql = "CALL addnewbook(?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, title, writer, isbn, description, price, dewey, publisherid, categoryid, ebook, amount);
     }
-    public void deleteBook(int id, String reason)
+    public void deleteBook(int id,int bookNumberId ,String reason)
     {
-        String sql = "CALL deletebook(?,?)";
-        jdbcTemplate.update(sql,id, reason);
+        String sql = "CALL deletebook(?,?,?)";
+        jdbcTemplate.update(sql,id, bookNumberId, reason);
     }
 
     public List findPublishers()
@@ -162,4 +198,32 @@ public class BookService {
         }
     }
 
+    public List findBookNumber(){
+
+        String sql = "SELECT * FROM booknumber";
+        try
+        {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new BookNumber(rs.getInt("id"),rs.getInt("books_id"),rs.getString("status"),rs.getString("comment")));
+        }
+        catch(Exception e)
+        {
+            return new ArrayList();
+        }
+    }
+
+    public List findAvailableBookNumbers (){
+        String sql = "SELECT * FROM availablebooknumberview";
+        try {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> new BookNumber(rs.getInt("id"),rs.getInt("books_id"),rs.getString("status"),rs.getString("comment")));
+        }
+        catch (Exception e){
+            return new ArrayList();
+        }
+
+    }
+
+    public void reEnableBook(int bookNumberId) {
+        String sql = "CALL make_book_available(?)";
+        jdbcTemplate.update(sql,bookNumberId);
+    }
 }

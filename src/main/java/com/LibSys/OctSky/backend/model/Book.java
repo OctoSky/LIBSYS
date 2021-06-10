@@ -1,7 +1,7 @@
 package com.LibSys.OctSky.backend.model;
 
 public class Book {
-     int id;
+    int id;
     String price;
     String title;
     String writer;

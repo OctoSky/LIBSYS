@@ -2,6 +2,7 @@ package com.LibSys.OctSky.backend.model;
 
 public class VisitorBook {
 
+    int id;
     String title;
     String writer;
     String description;
@@ -11,7 +12,9 @@ public class VisitorBook {
     String ebook;
     int amount;
 
-    public VisitorBook(String title, String writer, String description, String category, String publisher, String dewey, String ebook, int amount) {
+
+    public VisitorBook(int id, String title, String writer, String description, String category, String publisher, String dewey, String ebook, int amount) {
+        this.id = id;
         this.title = title;
         this.writer = writer;
         this.description = description;
@@ -20,6 +23,14 @@ public class VisitorBook {
         this.dewey = dewey;
         this.ebook = ebook;
         this.amount = amount;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -84,7 +95,7 @@ public class VisitorBook {
             returnValue =  "Ja";
         }
         else {
-            returnValue = "Utlånad";
+            returnValue = "Nej";
         }
         return returnValue;
     }

@@ -18,7 +18,7 @@ public class VisitorService {
         String sql = "SELECT * FROM visitorview";
         try {
             return jdbcTemplate.query(sql, (rs, rowNum) ->
-                    new Visitor(
+                    new Visitor(rs.getInt("roles_id"),
                             rs.getInt("visitorNumber"),
                     rs.getInt("cardNumber"),
                     rs.getString("ssn"),
@@ -34,6 +34,12 @@ public class VisitorService {
         catch (Exception e){
             return new ArrayList();
         }
+    }
+
+    public void disableCard(int cardnumber, int roleid)
+    {
+        String sql = "CALL disablecard(?,?)";
+        jdbcTemplate.update(sql, cardnumber, roleid);
     }
 
     public void deleteVisitor(int visitorNumber)
@@ -55,7 +61,7 @@ public class VisitorService {
         jdbcTemplate.update(sql, visitorid, SSN, vfirstname, vsurname, vemail, vphone, vaddress, enc_pass);
     }
 
-    public void addVisitor(String ssn,
+    public void addVisitor(int cardNumber,String ssn,
                            String firstname,
                            String surname,
                            String email,
@@ -64,7 +70,7 @@ public class VisitorService {
                            String encrypt_pass,
                            String pass_in)
     {
-        String sql = "CALL addVisitor(?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, ssn, firstname, surname, email, phone, address, pass_in, encrypt_pass);
+        String sql = "CALL addVisitor(?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql,cardNumber, ssn, firstname, surname, email, phone, address, pass_in, encrypt_pass);
     }
 }

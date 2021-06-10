@@ -8,6 +8,7 @@ import com.LibSys.OctSky.frontend.Views.ArchivedBooksView;
 import com.LibSys.OctSky.frontend.Views.ManageBookView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -44,12 +45,16 @@ public class VisitorLayout extends AppLayout {
 
     private Component createHeaderContent() {
         Avatar avatar = new Avatar();
-        Anchor logout = new Anchor("logout", "Logga ut");
-        Anchor login = new Anchor("login", "Logga in");
+        Anchor logout = new Anchor("logout", " Logga ut");
+        Anchor login = new Anchor("login", " Logga in");
+        Anchor adminpanel = new Anchor("user", "Adminpanel |");
+        adminpanel.setWidth("130px");
+        Anchor librarianpanel = new Anchor("visitor","Adminpanel |");
+        librarianpanel.setWidth("120px");
         VerticalLayout fillLayout = new VerticalLayout();
-        fillLayout.setWidth("160px");
+        fillLayout.setWidth("290px");
         login.setWidth("80px");
-        logout.setWidth("80px");
+        logout.setWidth("100px");
         H2 h1 = new H2("October Sky's Bibliotek");
         HorizontalLayout layout = new HorizontalLayout();
         VerticalLayout verticalLayout = new VerticalLayout();
@@ -63,6 +68,14 @@ public class VisitorLayout extends AppLayout {
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         layout.add(fillLayout);
         layout.add(verticalLayout);
+       if(getUserRole().equals("[ROLE_ADMIN]"))
+       {
+           layout.add(adminpanel);
+       }
+       if(getUserRole().equals("[ROLE_LIBRARIAN]"))
+       {
+           layout.add(librarianpanel);
+       }
         if(isUserLoggedIn())
         {
             layout.add(logout);
@@ -86,7 +99,7 @@ public class VisitorLayout extends AppLayout {
             String surname = (String) out.get("surname_out");
             name =  firstname + " " + surname;
         }
-        else if(getUserRole().equals("[ROLE_MEMBER]"))
+        else if(getUserRole().equals("[ROLE_MEMBER]") || getUserRole().equals("[ROLE_MEMBER_DISABLE_THEFT]") ||getUserRole().equals("[ROLE_MEMBER_DISABLE_LATE]") || getUserRole().equals("[ROLE_MEMBER_DISABLE_LOST]"))
         {
             Map<String, Object> out2 = staffService.searchUsersWithCard(getUserNumber());
             String firstname = (String) out2.get("firstname_out");

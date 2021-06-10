@@ -51,6 +51,8 @@ public class AdminLayout extends AppLayout {
         Avatar avatar = new Avatar();
         HorizontalLayout layout = new HorizontalLayout();
         Anchor logout = new Anchor("logout", "Logga ut");
+        Anchor home = new Anchor("","Tillbaka |");
+        home.setWidth("65px");
         logout.setWidth("80px");
         avatar.setName(getFullName());
         layout.setId("header");
@@ -61,6 +63,7 @@ public class AdminLayout extends AppLayout {
         layout.add(new DrawerToggle());
         viewTitle = new H1();
         layout.add(viewTitle);
+        layout.add(home);
         layout.add(logout);
         layout.expand(viewTitle);
         layout.add(avatar);
@@ -88,20 +91,36 @@ public class AdminLayout extends AppLayout {
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.addThemeVariants(TabsVariant.LUMO_MINIMAL);
         tabs.setId("tabs");
-        tabs.add(createMenuItems());
+        if(getUserRole().equals("[ROLE_ADMIN]")) {
+            tabs.add(createAdminItems());
+        }
+        if(getUserRole().equals("[ROLE_LIBRARIAN]"))
+        {
+            tabs.add(createLibrarianItems());
+        }
         return tabs;
     }
 
 
-    private Component[] createMenuItems() {
+    private Component[] createAdminItems() {
+        return new Tab[]
+                {
+                        createTab("Hantera Personal", AddUserView.class),
+                        createTab("Hantera Besökare", AddVisitorView.class),
+                        createTab("Hantera Böcker", ManageBookView.class),
+                        createTab("Arkiverade Böcker", ArchivedBooksView.class),
+                        createTab("Lånade Böcker", BorrowedBookView.class)
+                };
+    }
+
+    private Component[] createLibrarianItems() {
         return new Tab[]{
-                createTab("Hantera Användare", AddUserView.class),
                 createTab("Hantera Besökare", AddVisitorView.class),
                 createTab("Hantera Böcker", ManageBookView.class),
                 createTab("Arkiverade Böcker", ArchivedBooksView.class),
                 createTab("Lånade Böcker", BorrowedBookView.class)
         };
-            }
+    }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
         final Tab tab = new Tab();
@@ -168,12 +187,4 @@ public class AdminLayout extends AppLayout {
         return currentRole;
     }
 
-    static boolean isUserLoggedIn() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isLoggedIn = false;
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated()) {
-            isLoggedIn = true;
-        }
-        return isLoggedIn;
-    }
 }

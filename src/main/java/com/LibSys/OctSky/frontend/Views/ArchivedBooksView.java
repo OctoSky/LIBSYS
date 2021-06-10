@@ -18,6 +18,7 @@ import com.vaadin.flow.router.Route;
 @PageTitle("Arkiverade Böcker")
 @CssImport("./views/about/about-view.css")
 public class ArchivedBooksView extends VerticalLayout {
+
     private Grid<ArchivedBooks> grid = new Grid<>(ArchivedBooks.class);
     private BookService bookService;
     public ArchivedBooksView(BookService bookService)
@@ -32,7 +33,7 @@ public class ArchivedBooksView extends VerticalLayout {
 
     public void configureGrid()
     {
-        grid.setColumns("id","title", "writer", "description", "price", "isbn", "dewey", "category", "publisher","categoryId","publisherId", "reason");
+        grid.setColumns("id","title", "writer", "description", "price", "isbn", "dewey", "category", "publisher","categoryId","publisherId", "reason","booknumber");
         grid.getColumnByKey("title").setHeader("Titel");
         grid.getColumnByKey("writer").setHeader("Författare");
         grid.getColumnByKey("price").setHeader("Pris");
@@ -40,6 +41,7 @@ public class ArchivedBooksView extends VerticalLayout {
         grid.getColumnByKey("dewey").setHeader("Dewey");
         grid.getColumnByKey("category").setHeader("Kategori");
         grid.getColumnByKey("publisher").setHeader("Förlag");
+        grid.getColumnByKey("booknumber").setHeader("Exemplarnummer");
         grid.removeColumnByKey("id");
         grid.removeColumnByKey("description");
         grid.removeColumnByKey("categoryId");
@@ -48,6 +50,9 @@ public class ArchivedBooksView extends VerticalLayout {
         grid.addComponentColumn(item -> createReasonButton(item))
                 .setKey("anledning");
         grid.getColumnByKey("anledning").setHeader("Anledning");
+
+        grid.addComponentColumn(item -> createEnableButton(item)).setKey("enable");
+        grid.getColumnByKey("enable").setHeader("");
 
     }
     public Button createReasonButton(ArchivedBooks item)
@@ -67,6 +72,17 @@ public class ArchivedBooksView extends VerticalLayout {
 
         return button;
     }
+
+    private Button createEnableButton(ArchivedBooks archivedBook) {
+
+        Button enableButton = new Button("Ej längre arkiverad", clickEvent -> {
+            bookService.reEnableBook(archivedBook.getBooknumber());
+            populateGrid();
+        });
+
+        return enableButton;
+    }
+
     public void populateGrid()
     {
         grid.setItems(bookService.findArchivedBooks());

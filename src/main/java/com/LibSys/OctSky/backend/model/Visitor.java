@@ -2,6 +2,7 @@ package com.LibSys.OctSky.backend.model;
 
 public class Visitor {
 
+    private int roleId;
     private int visitorNumber;
     private int cardnumber;
     private String socialsecuritynumber;
@@ -10,7 +11,8 @@ public class Visitor {
     private String email, phone, address;
 
 
-    public Visitor(int visitorNumber, int cardnumber, String socialsecuritynumber, String firstname, String surname, String email, String phone, String address) {
+    public Visitor(int roleId, int visitorNumber, int cardnumber, String socialsecuritynumber, String firstname, String surname, String email, String phone, String address) {
+        this.roleId = roleId;
         this.visitorNumber = visitorNumber;
         this.cardnumber = cardnumber;
         this.socialsecuritynumber = socialsecuritynumber;
@@ -19,6 +21,14 @@ public class Visitor {
         this.email = email;
         this.phone = phone;
         this.address = address;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
     public String getEmail() {
