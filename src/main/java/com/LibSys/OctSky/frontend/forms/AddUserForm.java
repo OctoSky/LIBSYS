@@ -10,7 +10,6 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -49,7 +48,7 @@ public class AddUserForm extends FormLayout {
     public AddUserForm(StaffService staffService, AddUserView addUserView) {
         this.staffService = staffService;
         this.addUserView = addUserView;
-        phone.setMaxLength(9);
+        phone.setMaxLength(10);
 
         configureBinder();
         configureComboBox();

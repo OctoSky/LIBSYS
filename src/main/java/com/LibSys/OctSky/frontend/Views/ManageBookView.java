@@ -78,10 +78,12 @@ public class ManageBookView extends VerticalLayout {
         add(buttonLayout, filterLayout, grid, manageBookForm);
         selectionCopy.setValue(null);
     }
+
     public BookNumber getCopySelection()
     {
         return selectionCopy.getValue();
     }
+
     public void configureFilter()
     {
         String[] filterStrings = new String[]{"titel", "författare", "isbn", "kategori"};
@@ -193,6 +195,7 @@ public class ManageBookView extends VerticalLayout {
     public void populateCopiesGrid(int bookid)
     {
         selectionCopy.setValue(null);
+        selectionCopy.clear();
         List<BookNumber> oldList = bookService.findBookNumber();
         ArrayList<BookNumber> filteredList = new ArrayList<>();
 
